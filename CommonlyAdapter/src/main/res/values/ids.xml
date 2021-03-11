@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tag_item_data" type="id" />
+    <item name="tag_configuration" type="id" />
+
+    <item name="tag_item_context" type="id" />
+    <item name="tag_item_id" type="id" />
+    <item name="tag_item_condition" type="id" />
+
+    <item name="condition_select" type="id" />
+</resources>

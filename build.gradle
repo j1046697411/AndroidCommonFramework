@@ -1,0 +1,44 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+
+        classpath "com.android.tools.build:gradle:4.1.2"
+        classpath "com.alibaba:arouter-register:1.0.2"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+        options.addStringOption('charSet', 'UTF-8')
+    }
+
+    ext {
+        okHttpVersion = '4.8.1'
+        greendaoVersion = '3.3.0'
+//        retrofitVersion = '2.9.0'
+        commonsVersion = '0.0.5-alpha-1'
+        fastjsonVersion = '1.2.73'
+        installreferrerVersion = '1.0'
+        arouterVersion = '1.5.1'
+        mmkvVersion = '1.0.16'
+        glideVersion= '4.12.0'
+    }
+
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="mainViewModel"
+            type="org.jzl.android.app.vm.MainViewModel" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_add_1"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="@string/add_all" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_add_2"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="@string/add_all_2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_add_3"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="@string/add_all_2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vp_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+</layout>

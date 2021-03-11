@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AndroidCommonFramework</string>
+    <string name="diff">diff</string>
+    <string name="diff2">diff2</string>
+    <string name="clear">clear</string>
+    <string name="add_all">addAll</string>
+    <string name="add_header">add header</string>
+    <string name="data_empty">数据为空</string>
+    <string name="add_all_2">add all</string>
+</resources>
