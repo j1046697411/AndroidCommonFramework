@@ -1,3 +1,5 @@
+include ':JRouterAnnotation'
+include ':JRouter'
 include ':FluxIO'
 include ':commons'
 include ':CommonlyMVVM'

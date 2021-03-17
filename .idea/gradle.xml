@@ -14,6 +14,8 @@
             <option value="$PROJECT_DIR$/CommonlyAdapter" />
             <option value="$PROJECT_DIR$/CommonlyMVVM" />
             <option value="$PROJECT_DIR$/FluxIO" />
+            <option value="$PROJECT_DIR$/JRouter" />
+            <option value="$PROJECT_DIR$/JRouterAnnotation" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/commons" />
           </set>

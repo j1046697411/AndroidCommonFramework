@@ -25,7 +25,6 @@ public class WritableByteChannelSink implements ISink {
                 break;
             }
             int writeLength = segment.read(writableByteChannel, byteCount);
-            System.out.println(writeLength);
             segments.require(segment);
             if (writeLength == -1) {
                 break;

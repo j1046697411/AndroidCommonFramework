@@ -2,6 +2,7 @@ package org.jzl.io.impl;
 
 import org.jzl.io.IBufferedSink;
 import org.jzl.io.IBufferedSource;
+import org.jzl.lang.util.pool.IResettable;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-public class Segment {
+public class Segment implements IResettable {
 
     public static final int SIZE = 8192;
     public static final int SHARE_MINIMUM = 1024;
@@ -80,11 +81,13 @@ public class Segment {
         return this.next;
     }
 
-    void reset() {
+    @Override
+    public void reset() {
         this.prev = this;
         this.next = this;
         this.position = 0;
         this.limit = 0;
+        this.shared = false;
     }
 
     int write(ReadableByteChannel channel, int length) throws IOException{
@@ -128,7 +131,7 @@ public class Segment {
     }
 
     int read(WritableByteChannel channel, int length) throws IOException{
-        int readLength = channel.write(ByteBuffer.wrap(this.bytes, position, Math.min(length, length)));
+        int readLength = channel.write(ByteBuffer.wrap(this.bytes, position, Math.min(length, length())));
         if (readLength != -1){
             this.position += readLength;
         }

@@ -24,7 +24,6 @@ public class ReadableByteChannelSource implements ISource {
         if (length != -1) {
             segments.setSize(buffer.size() + length);
         }
-        System.out.println("length -> " + length + "," + segment.position + "," + segment.limit + "," + Arrays.toString(segment.bytes));
         return length;
     }
 

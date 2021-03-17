@@ -8,7 +8,7 @@ java {
 }
 
 dependencies {
-    implementation "org.jzl.lang:commons:$commonsVersion"
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation project(path: ':commons')
 }

@@ -6,9 +6,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import org.jzl.android.app.databinding.ActivityMainBinding;
 import org.jzl.android.app.vm.MainViewModel;
-import org.jzl.android.mvvm.AbstractMVVMActivity;
-import org.jzl.android.mvvm.helper.IViewHelper;
-import org.jzl.android.mvvm.helper.IViewHelperFactory;
 import org.jzl.android.recyclerview.core.configuration.Configuration;
 import org.jzl.android.recyclerview.core.data.CommonlyModel;
 import org.jzl.android.recyclerview.core.data.DefaultListDataProvider;
@@ -24,8 +21,12 @@ import org.jzl.android.recyclerview.util.Logger;
 import org.jzl.android.recyclerview.util.ScreenUtils;
 import org.jzl.android.recyclerview.util.datablock.DataBlockProvider;
 import org.jzl.android.recyclerview.util.datablock.OnDataBlockChangedCallback;
+import org.jzl.android.mvvm.core.IViewHelper;
+import org.jzl.android.mvvm.core.IViewHelperFactory;
+import org.jzl.android.mvvm.view.AbstractMVVMActivity;
 import org.jzl.lang.util.CollectionUtils;
 import org.jzl.lang.util.RandomUtils;
+import org.jzl.router.core.JRouter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +38,12 @@ public class MainActivity extends AbstractMVVMActivity<MainActivity, MainViewMod
     DefaultListDataProvider<CommonlyModel, CommonlyViewHolder> dataProvider = new DefaultListDataProvider<>();
 
     @Override
-    public IViewHelper<MainActivity, MainViewModel, ActivityMainBinding> createViewHelper(IViewHelperFactory viewHelperFactory) {
+    public IViewHelper<MainActivity, MainViewModel> createViewHelper(IViewHelperFactory viewHelperFactory) {
         return viewHelperFactory.createViewHelper(this, R.layout.activity_main, BR.mainViewModel, MainViewModel.class);
     }
 
     @Override
     public void initialise(@NonNull ActivityMainBinding viewDataBinding, @NonNull MainViewModel viewModel) {
-
         Configuration<CommonlyModel, CommonlyViewHolder> configuration = Configuration.<CommonlyModel>builder()
                 .enableEmptyLayout()
                 .createEmptyLayoutItemView(R.layout.item_empty)
@@ -91,7 +91,7 @@ public class MainActivity extends AbstractMVVMActivity<MainActivity, MainViewMod
 //
         viewDataBinding.btnAdd1.setOnClickListener(v -> {
             GroupExpandable<CommonlyModel> group = groupManager.group(RandomUtils.random(10));
-            if (CollectionUtils.isEmpty(group.getGroupHeader())){
+            if (CollectionUtils.isEmpty(group.getGroupHeader())) {
                 group.getGroupHeader().add(CommonlyModel.of(new GroupHeader(group.getGroupId(), String.valueOf(group.getGroupId())), 3, SpanSize.ALL));
             }
             List<CommonlyModel> materials = new ArrayList<>();
@@ -102,6 +102,10 @@ public class MainActivity extends AbstractMVVMActivity<MainActivity, MainViewMod
             log.i(dataProvider.size() + "");
         });
         viewDataBinding.btnAdd2.setOnClickListener(v -> dataProvider.clear());
+        viewDataBinding.btnAdd3.setOnClickListener(v -> {
+            JRouter.getInstance().navigation(this, "/test", postcard -> {
+            });
+        });
 //
 //        viewDataBinding.btnAdd3.setOnClickListener(v -> {
 //            List<CommonlyModel> materials = new ArrayList<>();
