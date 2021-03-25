@@ -20,7 +20,7 @@ public abstract class AbstractMVVMActivity<V extends AbstractMVVMActivity<V, VM,
 
     public static final String KEY_ACTIVITY_VIEW_MODEL = "org.jzl.android.mvvm.view.Activity::ActivityViewModel";
 
-    private final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
+    protected final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
     private ActivityViewModel activityViewModel;
 
     @Override

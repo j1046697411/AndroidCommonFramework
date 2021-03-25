@@ -17,15 +17,15 @@ public class ActivityViewModel extends AbstractViewModel {
         super.bindVariable(view);
     }
 
-    public void finish(){
+    public void finish() {
         finishActivity(Activity.RESULT_CANCELED);
     }
 
-    public void finishActivity(int resultCode){
+    public void finishActivity(int resultCode) {
         finishActivity(resultCode, null);
     }
 
-    public void finishActivity(int resultCode, Intent resultData){
+    public void finishActivity(int resultCode, Intent resultData) {
         finish.postValue(new ActivityFinishModel(resultCode, resultData));
     }
 

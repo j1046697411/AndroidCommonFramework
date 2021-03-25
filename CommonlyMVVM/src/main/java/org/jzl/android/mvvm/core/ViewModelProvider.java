@@ -14,7 +14,7 @@ public final class ViewModelProvider {
         this.viewModelFactory = viewModelFactory;
     }
 
-    public boolean containsViewModel(String key){
+    public boolean containsViewModel(String key) {
         return viewModelStore.getKeys().contains(key);
     }
 

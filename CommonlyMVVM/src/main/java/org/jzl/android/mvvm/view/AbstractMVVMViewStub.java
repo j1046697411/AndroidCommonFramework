@@ -1,33 +1,42 @@
 package org.jzl.android.mvvm.view;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
 
 import org.jzl.android.mvvm.core.IExtendView;
 import org.jzl.android.mvvm.core.IViewModel;
 import org.jzl.android.mvvm.core.IViewModelStore;
-import org.jzl.android.mvvm.core.IViewModelStoreOwner;
 import org.jzl.android.mvvm.core.ViewStore;
 
-public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM, VDB>, VM extends IViewModel, VDB extends ViewDataBinding>
-        extends Fragment implements IExtendView<V, VM, VDB>, IViewModelStoreOwner {
+public abstract class AbstractMVVMViewStub<V extends AbstractMVVMViewStub<V, VM, VDB>, VM extends IViewModel, VDB extends ViewDataBinding>
+        implements IExtendView<V, VM, VDB> {
 
-    protected final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
+    private final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
+    private final IExtendView<?, ?, ?> extendView;
+    private final ViewStub viewStub;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return viewStore.inflate(this, inflater, container, savedInstanceState);
+    public AbstractMVVMViewStub(IExtendView<?, ?, ?> extendView, ViewStub viewStub) {
+        this.extendView = extendView;
+        this.viewStub = viewStub;
+        viewStub.setOnInflateListener((stub, inflated) -> viewStore.bind(this, inflated));
+        extendView.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                onDestroy();
+            }
+        });
     }
 
+    public View inflate() {
+        if (viewStub.getLayoutResource() == 0) {
+            viewStub.setLayoutResource(viewStore.getViewHelper(this).getLayoutId());
+        }
+        return viewStub.inflate();
+    }
 
     @Override
     public VDB getViewDataBinding() {
@@ -39,20 +48,15 @@ public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM,
         return viewStore.getViewModel();
     }
 
+    @Override
+    public IExtendView<?, ?, ?> getParentContainerView() {
+        return extendView;
+    }
+
     @NonNull
     @Override
     public IViewModelStore getTargetViewModelStore() {
         return viewStore.getTargetViewModelStore();
-    }
-
-    @Override
-    public IExtendView<?, ?, ?> getParentContainerView() {
-        Activity activity = getActivity();
-        if (activity instanceof IExtendView<?, ?, ?>) {
-            return (IExtendView<?, ?, ?>) activity;
-        } else {
-            return this;
-        }
     }
 
     @Override
@@ -81,12 +85,22 @@ public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM,
     }
 
     @Override
+    public <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType) {
+        return viewStore.createViewModel(viewModelType);
+    }
+
+    @Override
     public <VM1 extends IViewModel> VM1 createViewModel(String key, Class<VM1> viewModelType) {
         return viewStore.createViewModel(key, viewModelType);
     }
 
+    @NonNull
     @Override
-    public <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType) {
-        return viewStore.createViewModel(viewModelType);
+    public Lifecycle getLifecycle() {
+        return extendView.getLifecycle();
+    }
+
+    protected void onDestroy() {
+        viewStore.onDestroy();
     }
 }

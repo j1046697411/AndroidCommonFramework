@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
-public class ActivityFinishModel implements Serializable {
+public final class ActivityFinishModel implements Serializable {
 
     private final int resultCode;
     private final Intent resultData;

@@ -1,7 +1,6 @@
 package org.jzl.android.mvvm.view;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ public abstract class AbstractMVVMDialogFragment<V extends AbstractMVVMDialogFra
         extends AppCompatDialogFragment implements IExtendView<V, VM, VDB>, IPreBindingView {
 
     private final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
-    private DialogViewModel dialogViewModel;
+    protected DialogViewModel dialogViewModel;
 
     @Nullable
     @Override
@@ -43,9 +42,9 @@ public abstract class AbstractMVVMDialogFragment<V extends AbstractMVVMDialogFra
         viewStore.bindVariable(variableId, value);
     }
 
-    protected void bindDialogViewModel(DialogViewModel dialogViewModel){
+    protected void bindDialogViewModel(DialogViewModel dialogViewModel) {
         dialogViewModel.dismiss.observe(this, aBoolean -> {
-            if (ObjectUtils.nonNull(aBoolean) && aBoolean){
+            if (ObjectUtils.nonNull(aBoolean) && aBoolean) {
                 dismiss();
             }
         });

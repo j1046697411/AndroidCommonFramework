@@ -17,6 +17,7 @@ import androidx.databinding.ViewDataBinding;
 import org.jzl.lang.util.ForeachUtils;
 import org.jzl.lang.util.ObjectUtils;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -25,17 +26,15 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
         IViewHelperFactory, IViewModelStoreOwner {
 
     private static final IKeyGenerator DEFAULT_KEY_GENERATOR = (parentKey, extendView, viewModelType) -> parentKey + ":" + viewModelType.getCanonicalName();
-
+    private final HashSet<String> keys = new HashSet<>();
+    private final Set<String> unmodifiableKeys = Collections.unmodifiableSet(keys);
+    private final IKeyGenerator keyGenerator;
     private ViewModelProvider viewModelProvider;
     private IViewHelper<V, VM> viewHelper;
     private IViewModelStore viewModelStore;
-
     private VM viewModel;
     private VDB viewDataBinding;
-
-    private final Set<String> keys = new HashSet<>();
     private String defaultViewModelKeyPrefix;
-    private final IKeyGenerator keyGenerator;
 
     public ViewStore() {
         this(DEFAULT_KEY_GENERATOR);
@@ -82,13 +81,21 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
         if (extendView instanceof IPreBindingView) {
             ((IPreBindingView) extendView).onPreBinding();
         }
+        viewDataBinding.setLifecycleOwner(extendView);
         this.viewModel = this.createVariableViewModel(defaultViewModelKeyPrefix, viewHelper.getVariableId(), viewHelper.getViewModelType(), true, viewModel -> extendView.initialise(viewDataBinding, viewModel));
     }
 
     protected void preBind(IExtendView<V, VM, VDB> extendView) {
-        this.viewHelper = extendView.createViewHelper(this);
+        this.viewHelper = getViewHelper(extendView);
         this.defaultViewModelKeyPrefix = keyGenerator.generate("", extendView, viewHelper.getViewModelType());
         this.viewModelProvider = ViewModelProviders.of(extendView, viewHelper.getViewModelFactory());
+    }
+
+    public IViewHelper<V, VM> getViewHelper(IExtendView<V, VM, VDB> extendView) {
+        if (ObjectUtils.isNull(viewHelper)) {
+            viewHelper = extendView.createViewHelper(this);
+        }
+        return viewHelper;
     }
 
     public V getView() {
@@ -119,7 +126,7 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
     private void bindViewModelVariable(boolean isBindVariable, int variableId, IViewModel viewModel) {
         if (isBindVariable) {
             if (viewModel instanceof IViewModelBindVariableOwner) {
-                bindVariable(variableId, ((IViewModelBindVariableOwner<?>) viewModel).getBindVariable());
+                bindVariable(variableId, ((IViewModelBindVariableOwner) viewModel).getBindVariable());
             } else {
                 bindVariable(variableId, viewModel);
             }
@@ -143,7 +150,6 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
     }
 
     private <VM1 extends IViewModel> VM1 createVariableViewModel(String key, int variableId, Class<VM1> viewModelType, boolean isBindVariable, Consumer<VM1> initialise) {
-        keys.add(key);
         VM1 viewModel;
         if (this.viewModelProvider.containsViewModel(key)) {
             viewModel = this.viewModelProvider.get(key, viewModelType);
@@ -152,6 +158,7 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
                 initialise.accept(viewModel);
             }
         } else {
+            keys.add(key);
             viewModel = this.viewModelProvider.get(key, viewModelType, true);
             viewModel.bind(getView());
             bindViewModelVariable(isBindVariable, variableId, viewModel);
@@ -192,6 +199,10 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
             }
         }
         return viewModelStore;
+    }
+
+    public Set<String> getKeys() {
+        return unmodifiableKeys;
     }
 
     public void onDestroy() {

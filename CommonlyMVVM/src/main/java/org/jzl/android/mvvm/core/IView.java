@@ -14,7 +14,7 @@ public interface IView extends LifecycleOwner {
 
     <VM extends IViewModel> VM getViewModel(Class<VM> viewModelType);
 
-    <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType) ;
+    <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType);
 
     <VM1 extends IViewModel> VM1 createViewModel(String key, Class<VM1> viewModelType);
 

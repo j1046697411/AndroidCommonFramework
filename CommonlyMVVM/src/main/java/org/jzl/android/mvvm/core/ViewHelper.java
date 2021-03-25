@@ -20,6 +20,14 @@ class ViewHelper<V extends IView, VM extends IViewModel> implements IViewHelper<
         this.viewModelFactory = viewModelFactory;
     }
 
+    static <V extends IView, VM extends IViewModel> IViewHelper<V, VM> of(V view, int layoutId, int variableId, Class<VM> viewModelType, IViewModelFactory viewModelFactory) {
+        return new ViewHelper<>(view, layoutId, variableId, viewModelType, viewModelFactory);
+    }
+
+    static <V extends IView, VM extends IViewModel> IViewHelper<V, VM> of(V view, int layoutId, int variableId, Class<VM> viewModelType) {
+        return of(view, layoutId, variableId, viewModelType, ViewModelProviders.DEFAULT_VIEW_MODEL_FACTORY);
+    }
+
     @Override
     public IViewModelFactory getViewModelFactory() {
         return viewModelFactory;
@@ -45,14 +53,6 @@ class ViewHelper<V extends IView, VM extends IViewModel> implements IViewHelper<
     @Override
     public Class<VM> getViewModelType() {
         return viewModelType;
-    }
-
-    static <V  extends IView, VM extends IViewModel> IViewHelper<V, VM> of(V view, int layoutId, int variableId, Class<VM> viewModelType, IViewModelFactory viewModelFactory){
-        return new ViewHelper<>(view, layoutId, variableId, viewModelType, viewModelFactory);
-    }
-
-    static <V  extends IView, VM extends IViewModel> IViewHelper<V, VM> of(V view, int layoutId, int variableId, Class<VM> viewModelType){
-        return of(view, layoutId, variableId, viewModelType, ViewModelProviders.DEFAULT_VIEW_MODEL_FACTORY);
     }
 
 }
