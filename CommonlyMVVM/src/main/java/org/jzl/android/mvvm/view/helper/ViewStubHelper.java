@@ -1,9 +1,8 @@
 package org.jzl.android.mvvm.view.helper;
 
-import android.view.ViewStub;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.databinding.ViewStubProxy;
 
 import org.jzl.android.mvvm.core.IExtendView;
 import org.jzl.android.mvvm.core.IViewHelper;
@@ -19,20 +18,20 @@ public final class ViewStubHelper<VM extends IViewModel, VDB extends ViewDataBin
     private final int layoutResId;
     private final IViewHelperCallback<ViewStubHelper<VM, VDB>, VM, VDB> viewHelperCallback;
 
-    ViewStubHelper(IExtendView<?, ?, ?> extendView, ViewStub viewStub, Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<ViewStubHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
-        super(extendView, viewStub);
+    ViewStubHelper(IExtendView<?, ?, ?> extendView, ViewStubProxy viewStubProxy, Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<ViewStubHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
+        super(extendView, viewStubProxy);
         this.viewModelType = viewModelType;
         this.variableId = variableId;
         this.layoutResId = layoutResId;
         this.viewHelperCallback = viewHelperCallback;
     }
 
-    public static <VM extends IViewModel, VDB extends ViewDataBinding> ViewStubHelper<VM, VDB> of(IExtendView<?, ?, ?> extendView, ViewStub viewStub, Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<ViewStubHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
-        return new ViewStubHelper<>(extendView, viewStub, viewModelType, variableId, layoutResId, viewHelperCallback);
+    public static <VM extends IViewModel, VDB extends ViewDataBinding> ViewStubHelper<VM, VDB> of(IExtendView<?, ?, ?> extendView, ViewStubProxy viewStubProxy, Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<ViewStubHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
+        return new ViewStubHelper<>(extendView, viewStubProxy, viewModelType, variableId, layoutResId, viewHelperCallback);
     }
 
-    public static <VM extends IViewModel, VDB extends ViewDataBinding> ViewStubHelper<VM, VDB> of(IExtendView<?, ?, ?> extendView, ViewStub viewStub, Class<VM> viewModelType, int variableId, int layoutResId) {
-        return of(extendView, viewStub, viewModelType, variableId, layoutResId, null);
+    public static <VM extends IViewModel, VDB extends ViewDataBinding> ViewStubHelper<VM, VDB> of(IExtendView<?, ?, ?> extendView, ViewStubProxy viewStubProxy, Class<VM> viewModelType, int variableId, int layoutResId) {
+        return of(extendView, viewStubProxy, viewModelType, variableId, layoutResId, null);
     }
 
     @Override

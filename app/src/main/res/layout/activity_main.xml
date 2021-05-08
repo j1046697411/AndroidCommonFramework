@@ -16,6 +16,12 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+        <ViewStub
+            android:id="@+id/viewStub"
+            android:layout="@layout/item_empty"
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_1"
             android:layout_width="match_parent"

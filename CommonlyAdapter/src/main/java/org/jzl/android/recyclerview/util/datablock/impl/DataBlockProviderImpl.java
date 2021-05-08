@@ -221,6 +221,9 @@ public class DataBlockProviderImpl<T> extends AbstractDataSource<T> implements D
 
     @Override
     public void clear() {
+        if (isEmpty()){
+            return;
+        }
         int size = size();
         dataBlockObserver.disableDataChangedNotify();
         ForeachUtils.each(dataBlocks, List::clear);

@@ -1,6 +1,7 @@
 package org.jzl.android.mvvm.view;
 
 import android.app.Activity;
+import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,11 @@ public abstract class AbstractMVVMDialogFragment<V extends AbstractMVVMDialogFra
     }
 
     @Override
+    public Application getApplication() {
+        return requireActivity().getApplication();
+    }
+
+    @Override
     public void bindVariable(int variableId, Object value) {
         viewStore.bindVariable(variableId, value);
     }
@@ -61,8 +67,8 @@ public abstract class AbstractMVVMDialogFragment<V extends AbstractMVVMDialogFra
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         viewStore.onDestroy();
     }
 

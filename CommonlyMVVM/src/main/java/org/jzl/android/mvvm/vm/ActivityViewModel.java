@@ -12,11 +12,6 @@ public class ActivityViewModel extends AbstractViewModel {
 
     public final MutableLiveData<ActivityFinishModel> finish = new MutableLiveData<>();
 
-    @Override
-    protected void bindVariable(IView view) {
-        super.bindVariable(view);
-    }
-
     public void finish() {
         finishActivity(Activity.RESULT_CANCELED);
     }

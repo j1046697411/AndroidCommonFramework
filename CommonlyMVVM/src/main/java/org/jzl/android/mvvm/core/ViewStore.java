@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.OnRebindCallback;
 import androidx.databinding.ViewDataBinding;
 
 import org.jzl.lang.util.ForeachUtils;
@@ -78,10 +79,10 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
 
     protected void bind(IExtendView<V, VM, VDB> extendView, VDB viewDataBinding) {
         this.viewDataBinding = viewDataBinding;
+        viewDataBinding.setLifecycleOwner(extendView);
         if (extendView instanceof IPreBindingView) {
             ((IPreBindingView) extendView).onPreBinding();
         }
-        viewDataBinding.setLifecycleOwner(extendView);
         this.viewModel = this.createVariableViewModel(defaultViewModelKeyPrefix, viewHelper.getVariableId(), viewHelper.getViewModelType(), true, viewModel -> extendView.initialise(viewDataBinding, viewModel));
     }
 
@@ -201,7 +202,7 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
         return viewModelStore;
     }
 
-    public Set<String> getKeys() {
+    public final Set<String> getKeys() {
         return unmodifiableKeys;
     }
 
@@ -218,6 +219,10 @@ public class ViewStore<V extends IExtendView<V, VM, VDB>, VM extends IViewModel,
                     viewModel.unbind();
                 }
             });
+        }
+        if (ObjectUtils.nonNull(viewDataBinding)){
+            viewDataBinding.unbind();
+            viewDataBinding = null;
         }
     }
 

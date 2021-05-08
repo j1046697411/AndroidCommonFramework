@@ -2,8 +2,9 @@ package org.jzl.android.mvvm.core;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleOwner;
 
-public interface IExtendView<V extends IView, VM extends IViewModel, VDB extends ViewDataBinding> extends IView, IViewModelStoreOwner {
+public interface IExtendView<V extends IView, VM extends IViewModel, VDB extends ViewDataBinding> extends IView, IViewModelStoreOwner, LifecycleOwner {
 
     IViewHelper<V, VM> createViewHelper(IViewHelperFactory viewHelperFactory);
 

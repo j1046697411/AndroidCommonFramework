@@ -1,6 +1,6 @@
 package org.jzl.android.mvvm.core;
 
-public interface IViewModelBindVariableOwner extends IViewModel {
+public interface IViewModelBindVariableOwner {
 
     Object getBindVariable();
 

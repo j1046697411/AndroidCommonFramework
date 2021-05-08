@@ -1,18 +1,20 @@
 package org.jzl.android.mvvm.core;
 
-import androidx.lifecycle.LifecycleOwner;
+import android.app.Application;
 
-public interface IView extends LifecycleOwner {
+public interface IView {
+
+    Application getApplication();
 
     void bindVariable(int variableId, Object value);
 
-    <VM extends IViewModel> VM bindVariableViewModel(int variableId, Class<VM> viewModelType);
+    <VM1 extends IViewModel> VM1 bindVariableViewModel(int variableId, Class<VM1> viewModelType);
 
-    <VM extends IViewModel> VM bindVariableViewModel(String key, int variableId, Class<VM> viewModelType);
+    <VM1 extends IViewModel> VM1 bindVariableViewModel(String key, int variableId, Class<VM1> viewModelType);
 
-    <VM extends IViewModel> VM getViewModel(String key, Class<VM> viewModelType);
+    <VM1 extends IViewModel> VM1 getViewModel(String key, Class<VM1> viewModelType);
 
-    <VM extends IViewModel> VM getViewModel(Class<VM> viewModelType);
+    <VM1 extends IViewModel> VM1 getViewModel(Class<VM1> viewModelType);
 
     <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType);
 

@@ -16,10 +16,10 @@ public class AbstractViewModel implements IViewModel {
         preBind(view);
     }
 
-    protected void preBind(IView view) {
+    protected void preBind(@NonNull IView view) {
     }
 
-    protected void bindVariable(IView view) {
+    protected void bindVariable(@NonNull IView view) {
     }
 
     @Override

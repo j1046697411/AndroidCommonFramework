@@ -21,7 +21,6 @@ public abstract class AbstractMVVMActivity<V extends AbstractMVVMActivity<V, VM,
     public static final String KEY_ACTIVITY_VIEW_MODEL = "org.jzl.android.mvvm.view.Activity::ActivityViewModel";
 
     protected final ViewStore<V, VM, VDB> viewStore = new ViewStore<>();
-    private ActivityViewModel activityViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,8 +30,7 @@ public abstract class AbstractMVVMActivity<V extends AbstractMVVMActivity<V, VM,
 
     @Override
     public void onPreBinding() {
-        activityViewModel = createViewModel(KEY_ACTIVITY_VIEW_MODEL, ActivityViewModel.class);
-        bindActivityViewModel(activityViewModel);
+        bindActivityViewModel(createViewModel(KEY_ACTIVITY_VIEW_MODEL, ActivityViewModel.class));
     }
 
     protected void bindActivityViewModel(ActivityViewModel viewModel) {
@@ -98,7 +96,7 @@ public abstract class AbstractMVVMActivity<V extends AbstractMVVMActivity<V, VM,
     }
 
     @Override
-    public IExtendView<?, ?, ?> getParentContainerView() {
+    public final IExtendView<?, ?, ?> getParentContainerView() {
         return this;
     }
 

@@ -146,6 +146,9 @@ public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock
 
     @Override
     public void clear() {
+        if (isEmpty()){
+            return;
+        }
         int oldSize = size();
         super.clear();
         if (ObjectUtils.nonNull(dataBlockProvider)) {

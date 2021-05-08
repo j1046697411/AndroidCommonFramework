@@ -9,6 +9,7 @@ import org.jzl.android.app.vm.MainViewModel;
 import org.jzl.android.mvvm.core.IViewHelper;
 import org.jzl.android.mvvm.core.IViewHelperFactory;
 import org.jzl.android.mvvm.view.AbstractMVVMActivity;
+import org.jzl.android.mvvm.view.helper.ViewStubHelper;
 import org.jzl.android.recyclerview.core.configuration.Configuration;
 import org.jzl.android.recyclerview.core.data.CommonlyModel;
 import org.jzl.android.recyclerview.core.data.DefaultListDataProvider;

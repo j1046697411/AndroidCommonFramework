@@ -1,6 +1,7 @@
 package org.jzl.android.mvvm.view;
 
 import android.app.Activity;
+import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,10 @@ public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM,
         return viewStore.inflate(this, inflater, container, savedInstanceState);
     }
 
+    @Override
+    public Application getApplication() {
+        return requireActivity().getApplication();
+    }
 
     @Override
     public VDB getViewDataBinding() {
@@ -88,5 +93,11 @@ public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM,
     @Override
     public <VM1 extends IViewModel> VM1 createViewModel(Class<VM1> viewModelType) {
         return viewStore.createViewModel(viewModelType);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewStore.onDestroy();
     }
 }

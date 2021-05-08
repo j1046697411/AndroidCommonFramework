@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id "com.jfrog.bintray"
 }
-version = "0.0.15"//版本号，每次更新记得修改
+version = "0.0.16"//版本号，每次更新记得修改
 ext {
     bintrayRepo = 'commons' // 对应Bintray网站中，创建Repository的命名
     bintrayName = 'commonly-recyclerview' // 对应Bintray网站中，创建的package的命名(會新建)
@@ -29,12 +29,12 @@ ext {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 15
+        versionCode 16
         versionName version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
