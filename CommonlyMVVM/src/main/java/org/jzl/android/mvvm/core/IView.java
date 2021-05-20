@@ -2,9 +2,17 @@ package org.jzl.android.mvvm.core;
 
 import android.app.Application;
 
-public interface IView {
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+
+public interface IView extends LifecycleOwner {
 
     Application getApplication();
+
+    @NonNull
+    @Override
+    Lifecycle getLifecycle();
 
     void bindVariable(int variableId, Object value);
 

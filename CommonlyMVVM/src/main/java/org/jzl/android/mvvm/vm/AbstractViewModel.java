@@ -1,11 +1,12 @@
 package org.jzl.android.mvvm.vm;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleObserver;
 
 import org.jzl.android.mvvm.core.IView;
 import org.jzl.android.mvvm.core.IViewModel;
 
-public class AbstractViewModel implements IViewModel {
+public class AbstractViewModel implements IViewModel , LifecycleObserver {
 
     protected IView view;
 

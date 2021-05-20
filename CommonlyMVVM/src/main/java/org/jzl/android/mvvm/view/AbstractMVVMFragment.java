@@ -30,6 +30,7 @@ public abstract class AbstractMVVMFragment<V extends AbstractMVVMFragment<V, VM,
     }
 
     @Override
+    @NonNull
     public Application getApplication() {
         return requireActivity().getApplication();
     }

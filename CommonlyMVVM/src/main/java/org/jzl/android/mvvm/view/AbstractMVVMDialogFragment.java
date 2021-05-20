@@ -39,6 +39,7 @@ public abstract class AbstractMVVMDialogFragment<V extends AbstractMVVMDialogFra
     }
 
     @Override
+    @NonNull
     public Application getApplication() {
         return requireActivity().getApplication();
     }

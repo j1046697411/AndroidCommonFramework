@@ -43,6 +43,7 @@ public abstract class AbstractMVVMViewStub<V extends AbstractMVVMViewStub<V, VM,
     }
 
     @Override
+    @NonNull
     public Application getApplication() {
         return extendView.getApplication();
     }
