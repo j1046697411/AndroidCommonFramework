@@ -3,43 +3,41 @@ package org.jzl.android.mvvm.view.helper;
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 
-import org.jzl.android.mvvm.core.IViewHelper;
-import org.jzl.android.mvvm.core.IViewHelperFactory;
-import org.jzl.android.mvvm.core.IViewModel;
-import org.jzl.android.mvvm.view.AbstractMVVMFragment;
-import org.jzl.lang.util.ObjectUtils;
+import org.jzl.android.mvvm.IExtendView;
+import org.jzl.android.mvvm.IViewBindingHelper;
+import org.jzl.android.mvvm.IViewBindingHelperFactory;
+import org.jzl.android.mvvm.IViewModel;
+import org.jzl.android.mvvm.view.core.AbstractMVVMFragment;
 
-public final class FragmentHelper<VM extends IViewModel, VDB extends ViewDataBinding> extends AbstractMVVMFragment<FragmentHelper<VM, VDB>, VM, VDB> {
+public class FragmentHelper<VM extends IViewModel<FragmentHelper<VM, VDB>>, VDB extends ViewDataBinding> extends AbstractMVVMFragment<FragmentHelper<VM, VDB>, VM, VDB> {
 
-    private final Class<VM> viewModelType;
-    private final int variableId;
     private final int layoutResId;
-    private final IViewHelperCallback<FragmentHelper<VM, VDB>, VM, VDB> viewHelperCallback;
+    private final int variableId;
+    private final Class<VM> viewModelType;
+    private final IViewHelperCallback<FragmentHelper<VM, VDB>, VM, VDB> callback;
 
-    FragmentHelper(Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<FragmentHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
-        this.viewModelType = viewModelType;
-        this.variableId = variableId;
+    public FragmentHelper(IExtendView<?, ?, ?> parentContainerView, int layoutResId, int variableId, @NonNull Class<VM> viewModelType, IViewHelperCallback<FragmentHelper<VM, VDB>, VM, VDB> callback) {
+        super(parentContainerView);
         this.layoutResId = layoutResId;
-        this.viewHelperCallback = viewHelperCallback;
+        this.variableId = variableId;
+        this.viewModelType = viewModelType;
+        this.callback = callback;
     }
 
-    public static <VM extends IViewModel, VDB extends ViewDataBinding> FragmentHelper<VM, VDB> of(Class<VM> viewModelType, int variableId, int layoutResId, IViewHelperCallback<FragmentHelper<VM, VDB>, VM, VDB> viewHelperCallback) {
-        return new FragmentHelper<>(viewModelType, variableId, layoutResId, viewHelperCallback);
-    }
-
-    public static <VM extends IViewModel, VDB extends ViewDataBinding> FragmentHelper<VM, VDB> of(Class<VM> viewModelType, int variableId, int layoutResId) {
-        return of(viewModelType, variableId, layoutResId, null);
+    @NonNull
+    @Override
+    public IViewBindingHelper<FragmentHelper<VM, VDB>, VM> createViewBindingHelper(IViewBindingHelperFactory factory) {
+        return factory.createViewBindingHelper(this, layoutResId, variableId, viewModelType);
     }
 
     @Override
-    public IViewHelper<FragmentHelper<VM, VDB>, VM> createViewHelper(IViewHelperFactory viewHelperFactory) {
-        return viewHelperFactory.createViewHelper(this, layoutResId, variableId, viewModelType);
+    public void initialize(@NonNull VDB dataBinding, VM viewModel) {
+        callback.initialise(this, dataBinding, viewModel);
     }
 
     @Override
-    public void initialise(@NonNull VDB viewDataBinding, @NonNull VM viewModel) {
-        if (ObjectUtils.nonNull(viewHelperCallback)) {
-            viewHelperCallback.initialise(this, viewModel, viewDataBinding);
-        }
+    public void unbind() {
+        super.unbind();
+        callback.unbind();
     }
 }

@@ -1,26 +1,26 @@
 package org.jzl.android.mvvm.vm;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleObserver;
 
-import org.jzl.android.mvvm.core.IView;
-import org.jzl.android.mvvm.core.IViewModel;
+import org.jzl.android.mvvm.IView;
+import org.jzl.android.mvvm.IViewModel;
+import org.jzl.android.mvvm.IViewModelProvider;
 
-public class AbstractViewModel implements IViewModel , LifecycleObserver {
+public abstract class AbstractViewModel<V extends IView> implements IViewModel<V> {
 
-    protected IView view;
+    protected V view;
 
     @Override
-    public final void bind(@NonNull IView view) {
+    public final void bind(@NonNull V view) {
         this.view = view;
-        bindVariable(view);
+        bindVariable(view, view.getViewModelProvider());
         preBind(view);
     }
 
-    protected void preBind(@NonNull IView view) {
+    protected void preBind(@NonNull V view){
     }
 
-    protected void bindVariable(@NonNull IView view) {
+    protected void bindVariable(@NonNull V view, @NonNull IViewModelProvider viewModelProvider){
     }
 
     @Override
