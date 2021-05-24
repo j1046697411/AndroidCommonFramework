@@ -8,6 +8,7 @@ import org.jzl.android.mvvm.view.helper.DialogFragmentHelper;
 import org.jzl.android.mvvm.view.helper.FragmentHelper;
 import org.jzl.android.mvvm.view.helper.IViewHelperCallback;
 import org.jzl.android.mvvm.view.helper.ViewStubHelper;
+import org.jzl.android.mvvm.vm.HelperViewModel;
 
 @SuppressWarnings("all")
 public final class MVVM {

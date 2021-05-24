@@ -9,7 +9,8 @@ import org.jzl.android.mvvm.IViewBindingHelperFactory;
 import org.jzl.android.mvvm.IViewModel;
 import org.jzl.android.mvvm.view.core.AbstractMVVMFragment;
 
-public class FragmentHelper<VM extends IViewModel<FragmentHelper<VM, VDB>>, VDB extends ViewDataBinding> extends AbstractMVVMFragment<FragmentHelper<VM, VDB>, VM, VDB> {
+public class FragmentHelper<VM extends IViewModel<FragmentHelper<VM, VDB>>, VDB extends ViewDataBinding>
+        extends AbstractMVVMFragment<FragmentHelper<VM, VDB>, VM, VDB> {
 
     private final int layoutResId;
     private final int variableId;

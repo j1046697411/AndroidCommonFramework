@@ -12,9 +12,11 @@ public interface IActivityView extends IView, IUniversalView {
     @NonNull
     FragmentManager getSupportFragmentManager();
 
+    Intent getIntent();
+
     void setResult(int requestCode);
 
-    void setResult(int requestCode, @NonNull Intent intent);
+    void setResult(int requestCode, Intent intent);
 
     void finish();
 

@@ -3,6 +3,9 @@ package org.jzl.android.mvvm;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
+/**
+ * 提供创建 IViewBindingHelper 对象的工厂接口
+ */
 public interface IViewBindingHelperFactory {
 
     @NonNull
