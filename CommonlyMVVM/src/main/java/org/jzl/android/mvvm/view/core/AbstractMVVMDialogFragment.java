@@ -2,6 +2,7 @@ package org.jzl.android.mvvm.view.core;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 
 import org.jzl.android.mvvm.IExtendView;
 import org.jzl.android.mvvm.IView;
@@ -21,6 +21,7 @@ import org.jzl.android.mvvm.IViewModelStore;
 import org.jzl.android.mvvm.ViewHelper;
 import org.jzl.android.mvvm.view.IActivityView;
 import org.jzl.android.mvvm.view.IDialogFragment;
+import org.jzl.lang.util.ObjectUtils;
 
 public abstract class AbstractMVVMDialogFragment<V extends IView, VM extends IViewModel<V>, VDB extends ViewDataBinding> extends DialogFragment
         implements IExtendView<V, VM, VDB>, IDialogFragment {
@@ -102,12 +103,15 @@ public abstract class AbstractMVVMDialogFragment<V extends IView, VM extends IVi
 
     @Override
     public boolean isShowing() {
-        return getDialog().isShowing();
+        return isVisible();
     }
 
     @Override
     public void cancel() {
-        getDialog().cancel();
+        Dialog dialog = getDialog();
+        if (ObjectUtils.nonNull(dialog)) {
+            dialog.cancel();
+        }
     }
 
     @Override
