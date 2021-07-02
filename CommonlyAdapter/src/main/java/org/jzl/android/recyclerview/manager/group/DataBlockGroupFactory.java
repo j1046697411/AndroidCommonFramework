@@ -12,5 +12,5 @@ public interface DataBlockGroupFactory<T> extends DataBlockFactory<T> {
     @Override
     @NonNull
     DataBlockGroup<T> createDataBlock(DataBlockProvider<T> dataBlockProvider, PositionType positionType, int dataBlockId);
-    
+
 }

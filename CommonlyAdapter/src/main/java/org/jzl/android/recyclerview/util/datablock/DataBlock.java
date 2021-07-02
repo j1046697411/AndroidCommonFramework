@@ -4,6 +4,8 @@ public interface DataBlock<T> extends DataSource<T> {
 
     int getSortOrder();
 
+    void setSortOrder(int sortOrder);
+
     int getDataBlockId();
 
     PositionType getPositionType();
@@ -13,6 +15,4 @@ public interface DataBlock<T> extends DataSource<T> {
     void bindDataBlockProvider(DataBlockProvider<T> dataBlockProvider);
 
     void unbindDataBlockProvider();
-
-    void setSortOrder(int sortOrder);
 }

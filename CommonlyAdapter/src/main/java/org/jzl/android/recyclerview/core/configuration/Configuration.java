@@ -39,6 +39,14 @@ import java.util.concurrent.ExecutorService;
 
 public interface Configuration<T, VH extends RecyclerView.ViewHolder> {
 
+    static <T, VH extends RecyclerView.ViewHolder> ConfigurationBuilder<T, VH> builder(ViewHolderFactory<VH> viewHolderFactory) {
+        return new ConfigurationBuilderImpl<>(viewHolderFactory);
+    }
+
+    static <T> ConfigurationBuilder<T, CommonlyViewHolder> builder() {
+        return builder((itemView, viewType) -> new CommonlyViewHolder(itemView));
+    }
+
     Activity getCurrentActivity();
 
     Handler getMainHandler();
@@ -114,13 +122,5 @@ public interface Configuration<T, VH extends RecyclerView.ViewHolder> {
     Configuration<T, VH> addOnItemClickListener(OnItemClickListener<T, VH> itemClickListener, DataBindingMatchPolicy matchPolicy);
 
     Configuration<T, VH> addOnItemLongClickListener(OnItemLongClickListener<T, VH> itemLongClickListener, DataBindingMatchPolicy matchPolicy);
-
-    static <T, VH extends RecyclerView.ViewHolder> ConfigurationBuilder<T, VH> builder(ViewHolderFactory<VH> viewHolderFactory) {
-        return new ConfigurationBuilderImpl<>(viewHolderFactory);
-    }
-
-    static <T> ConfigurationBuilder<T, CommonlyViewHolder> builder() {
-        return builder((itemView, viewType) -> new CommonlyViewHolder(itemView));
-    }
 
 }

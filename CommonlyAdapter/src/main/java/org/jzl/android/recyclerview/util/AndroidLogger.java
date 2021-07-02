@@ -21,39 +21,39 @@ class AndroidLogger implements Logger {
         return Log.v(tag, msg, tr);
     }
 
-    public int d( @NonNull String msg) {
+    public int d(@NonNull String msg) {
         return Log.d(tag, msg);
     }
 
-    public  int d(@Nullable String msg, @Nullable Throwable tr) {
+    public int d(@Nullable String msg, @Nullable Throwable tr) {
         return Log.d(tag, msg, tr);
     }
 
-    public  int i( @NonNull String msg) {
+    public int i(@NonNull String msg) {
         return Log.i(tag, msg);
     }
 
-    public  int i( @Nullable String msg, @Nullable Throwable tr) {
+    public int i(@Nullable String msg, @Nullable Throwable tr) {
         return Log.i(tag, msg, tr);
     }
 
-    public  int w(@NonNull String msg) {
+    public int w(@NonNull String msg) {
         return Log.w(tag, msg);
     }
 
-    public  int w( @Nullable String msg, @Nullable Throwable tr) {
+    public int w(@Nullable String msg, @Nullable Throwable tr) {
         return Log.w(tag, msg, tr);
     }
 
-    public  int w(@Nullable Throwable tr) {
+    public int w(@Nullable Throwable tr) {
         return Log.w(tag, tr);
     }
 
-    public  int e( @NonNull String msg) {
+    public int e(@NonNull String msg) {
         return Log.e(tag, msg);
     }
 
-    public  int e(@Nullable String msg, @Nullable Throwable tr) {
+    public int e(@Nullable String msg, @Nullable Throwable tr) {
         return Log.e(tag, msg, tr);
     }
 }

@@ -7,5 +7,4 @@ public interface RecyclerViewConfiguration<T, VH extends RecyclerView.ViewHolder
     RecyclerView getRecyclerView();
 
 
-
 }

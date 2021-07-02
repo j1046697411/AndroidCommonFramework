@@ -57,4 +57,5 @@ dependencies {
     implementation project(path: ':CommonlyMVVM')
     annotationProcessor "com.alibaba:arouter-compiler:$arouterVersion"
 
+    implementation "com.offbynull.coroutines:user:1.5.3"
 }

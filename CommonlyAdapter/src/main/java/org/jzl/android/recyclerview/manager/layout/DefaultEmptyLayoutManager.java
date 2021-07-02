@@ -21,15 +21,15 @@ import java.util.Set;
 
 public class DefaultEmptyLayoutManager<T, VH extends RecyclerView.ViewHolder> extends AbstractManager<T, VH> implements EmptyLayoutManager<T, VH> {
 
+    private final CompositeDataBinder<T, VH> dataBinders = CompositeDataBinder.of();
+    private final CompositeEmptyLayoutCallback compositeEmptyLayoutCallback = new CompositeEmptyLayoutCallback();
     private boolean enable = false;
     private T data;
     private int itemType = TYPE_EMPTY_LAYOUT;
-    private final CompositeDataBinder<T, VH> dataBinders = CompositeDataBinder.of();
     private boolean isInitialise = false;
     private ItemViewFactory itemViewFactory;
     private DataProvider<T, VH> dataProvider;
     private boolean isEmpty = true;
-    private final CompositeEmptyLayoutCallback compositeEmptyLayoutCallback = new CompositeEmptyLayoutCallback();
 
     @Override
     public void setup(ConfigurationBuilder<T, VH> builder) {

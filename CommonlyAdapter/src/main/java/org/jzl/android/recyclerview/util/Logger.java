@@ -7,6 +7,10 @@ import org.jzl.android.recyclerview.BuildConfig;
 
 public interface Logger {
 
+    static Logger logger(Class<?> type) {
+        return BuildConfig.DEBUG ? new AndroidLogger(type.getSimpleName()) : new NullableLogger();
+    }
+
     int v(@NonNull String msg);
 
     int v(@Nullable String msg, @Nullable Throwable tr);
@@ -28,9 +32,5 @@ public interface Logger {
     int e(@NonNull String msg);
 
     int e(@Nullable String msg, @Nullable Throwable tr);
-
-    static Logger logger(Class<?> type) {
-        return BuildConfig.DEBUG ? new AndroidLogger(type.getSimpleName()) : new NullableLogger();
-    }
 
 }

@@ -17,6 +17,14 @@ public class CompositeDataBinder<T, VH extends RecyclerView.ViewHolder> implemen
         this.dataBinders = dataBinders;
     }
 
+    public static <T, VH extends RecyclerView.ViewHolder> CompositeDataBinder<T, VH> of(List<DataBinder<T, VH>> dataBinders) {
+        return new CompositeDataBinder<>(dataBinders);
+    }
+
+    public static <T, VH extends RecyclerView.ViewHolder> CompositeDataBinder<T, VH> of() {
+        return of(new ArrayList<>());
+    }
+
     public CompositeDataBinder<T, VH> addDataBinder(DataBinder<T, VH> dataBinder) {
         if (ObjectUtils.nonNull(dataBinder)) {
             dataBinders.add(dataBinder);
@@ -32,14 +40,6 @@ public class CompositeDataBinder<T, VH extends RecyclerView.ViewHolder> implemen
     @Override
     public void binding(Configuration<T, VH> configuration, VH holder, T data) {
         ForeachUtils.each(dataBinders, target -> target.binding(configuration, holder, data));
-    }
-
-    public static <T, VH extends RecyclerView.ViewHolder> CompositeDataBinder<T, VH> of(List<DataBinder<T, VH>> dataBinders) {
-        return new CompositeDataBinder<>(dataBinders);
-    }
-
-    public static <T, VH extends RecyclerView.ViewHolder> CompositeDataBinder<T, VH> of() {
-        return of(new ArrayList<>());
     }
 
 }

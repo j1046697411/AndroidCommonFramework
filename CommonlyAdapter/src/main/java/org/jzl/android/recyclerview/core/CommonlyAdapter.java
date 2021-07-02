@@ -137,7 +137,7 @@ public class CommonlyAdapter<T, VH extends RecyclerView.ViewHolder> extends Recy
         long s = System.currentTimeMillis();
         try {
             return dataProvider.get(position);
-        }finally {
+        } finally {
             log.i("getData -> " + (System.currentTimeMillis() - s));
         }
 

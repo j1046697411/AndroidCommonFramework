@@ -1,6 +1,6 @@
 package org.jzl.android.recyclerview.core.vh;
 
-public interface DataBinderCallback{
+public interface DataBinderCallback {
 
     void beforeBindViewHolder();
 

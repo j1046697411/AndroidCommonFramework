@@ -3,8 +3,6 @@ package org.jzl.android.recyclerview.manager.group;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jzl.android.recyclerview.manager.Manager;
-import org.jzl.android.recyclerview.util.datablock.DataBlockFactory;
-import org.jzl.android.recyclerview.util.datablock.DataBlockGroup;
 import org.jzl.android.recyclerview.util.datablock.DataBlockProvider;
 
 import java.util.Collection;
@@ -36,7 +34,7 @@ public interface GroupManager<T, VH extends RecyclerView.ViewHolder> extends Man
 
     void collapsed(int groupId);
 
-    void addAll(T ... data);
+    void addAll(T... data);
 
     void addAll(Collection<T> collection);
 

@@ -10,6 +10,7 @@ buildscript {
         classpath "com.alibaba:arouter-register:1.0.2"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.offbynull.coroutines:gradle-plugin:1.5.3'
     }
 }
 

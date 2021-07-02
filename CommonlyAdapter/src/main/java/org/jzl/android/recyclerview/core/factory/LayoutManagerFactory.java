@@ -6,6 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public interface LayoutManagerFactory {
 
-        RecyclerView.LayoutManager createLayoutManager(Context context, RecyclerView recyclerView);
+    RecyclerView.LayoutManager createLayoutManager(Context context, RecyclerView recyclerView);
 
 }

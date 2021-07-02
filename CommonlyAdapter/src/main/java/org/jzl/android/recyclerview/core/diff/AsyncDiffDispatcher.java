@@ -1,7 +1,6 @@
 package org.jzl.android.recyclerview.core.diff;
 
 import android.os.Handler;
-import android.os.Looper;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
@@ -16,7 +15,6 @@ import org.jzl.lang.util.ObjectUtils;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AsyncDiffDispatcher<T, VH extends RecyclerView.ViewHolder> implements IDiffDispatcher<T, VH> {
 

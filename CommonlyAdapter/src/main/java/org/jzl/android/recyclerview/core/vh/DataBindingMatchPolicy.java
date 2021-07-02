@@ -12,16 +12,6 @@ public interface DataBindingMatchPolicy {
     DataBindingMatchPolicy MATCH_POLICY_ALL = context -> context.getItemViewType() >= 0;
     DataBindingMatchPolicy MATCH_POLICY_NOT_INCLUDED_PAYLOADS = context -> CollectionUtils.isEmpty(context.getPayloads());
 
-    boolean match(ItemContext context);
-
-    default DataBindingMatchPolicy and(DataBindingMatchPolicy matchPolicy) {
-        return context -> match(context) && matchPolicy.match(context);
-    }
-
-    default DataBindingMatchPolicy or(DataBindingMatchPolicy matchPolicy) {
-        return context -> match(context) || matchPolicy.match(context);
-    }
-
     static DataBindingMatchPolicy ofItemTypes(int... itemTypes) {
         if (ArrayUtils.nonEmpty(itemTypes)) {
             return context -> {
@@ -52,6 +42,16 @@ public interface DataBindingMatchPolicy {
         } else {
             return MATCH_POLICY_ALL;
         }
+    }
+
+    boolean match(ItemContext context);
+
+    default DataBindingMatchPolicy and(DataBindingMatchPolicy matchPolicy) {
+        return context -> match(context) && matchPolicy.match(context);
+    }
+
+    default DataBindingMatchPolicy or(DataBindingMatchPolicy matchPolicy) {
+        return context -> match(context) || matchPolicy.match(context);
     }
 
 }

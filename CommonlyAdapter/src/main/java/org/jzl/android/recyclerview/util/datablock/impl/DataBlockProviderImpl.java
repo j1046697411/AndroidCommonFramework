@@ -221,7 +221,7 @@ public class DataBlockProviderImpl<T> extends AbstractDataSource<T> implements D
 
     @Override
     public void clear() {
-        if (isEmpty()){
+        if (isEmpty()) {
             return;
         }
         int size = size();

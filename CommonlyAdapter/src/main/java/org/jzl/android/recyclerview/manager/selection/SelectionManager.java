@@ -11,9 +11,9 @@ import org.jzl.android.recyclerview.core.configuration.ConfigurationBuilder;
 import org.jzl.android.recyclerview.core.data.DataProvider;
 import org.jzl.android.recyclerview.core.data.Selectable;
 import org.jzl.android.recyclerview.core.item.ItemDataHolder;
-import org.jzl.android.recyclerview.manager.AbstractManager;
 import org.jzl.android.recyclerview.core.observer.AdapterDataObservable;
 import org.jzl.android.recyclerview.core.vh.DataBindingMatchPolicy;
+import org.jzl.android.recyclerview.manager.AbstractManager;
 import org.jzl.lang.util.ArrayUtils;
 import org.jzl.lang.util.ObjectUtils;
 
@@ -35,6 +35,26 @@ public class SelectionManager<T extends Selectable, VH extends RecyclerView.View
         this.interceptor = interceptor;
         this.selectionMode = selectionMode;
         this.matchPolicy = matchPolicy;
+    }
+
+    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, SelectionInterceptor<T, VH> interceptor, DataBindingMatchPolicy matchPolicy) {
+        return new SelectionManager<>(selectionMode, interceptor, matchPolicy);
+    }
+
+    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, SelectionInterceptor<T, VH> interceptor) {
+        return of(selectionMode, interceptor, DataBindingMatchPolicy.MATCH_POLICY_ALL);
+    }
+
+    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionInterceptor<T, VH> interceptor) {
+        return of(SelectionMode.SINGLE, interceptor);
+    }
+
+    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, @IdRes int... ids) {
+        return of(selectionMode, new SelectionManager.DefaultSelectionInterceptor<>(ids));
+    }
+
+    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(@IdRes int... ids) {
+        return of(SelectionMode.SINGLE, ids);
     }
 
     @Override
@@ -134,26 +154,6 @@ public class SelectionManager<T extends Selectable, VH extends RecyclerView.View
                 holder.itemView.findViewById(id).setOnClickListener(listener);
             }
         }
-    }
-
-    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, SelectionInterceptor<T, VH> interceptor, DataBindingMatchPolicy matchPolicy) {
-        return new SelectionManager<>(selectionMode, interceptor, matchPolicy);
-    }
-
-    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, SelectionInterceptor<T, VH> interceptor) {
-        return of(selectionMode, interceptor, DataBindingMatchPolicy.MATCH_POLICY_ALL);
-    }
-
-    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionInterceptor<T, VH> interceptor) {
-        return of(SelectionMode.SINGLE, interceptor);
-    }
-
-    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(SelectionMode selectionMode, @IdRes int... ids) {
-        return of(selectionMode, new SelectionManager.DefaultSelectionInterceptor<>(ids));
-    }
-
-    public static <T extends Selectable, VH extends RecyclerView.ViewHolder> SelectionManager<T, VH> of(@IdRes int... ids) {
-        return of(SelectionMode.SINGLE, ids);
     }
 
 }

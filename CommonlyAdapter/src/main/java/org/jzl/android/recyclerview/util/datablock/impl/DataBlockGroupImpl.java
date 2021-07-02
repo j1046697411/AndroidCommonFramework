@@ -16,18 +16,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataBlockGroupImpl<T> extends AbstractDataSource<T> implements DataBlockGroup<T> {
-
-    private int sortOrder = IdHelper.ID.incrementAndGet();
 
     private final DataBlockProvider<T> dataBlockProvider;
     private final int dataBlockId;
     private final PositionType positionType;
+    private final AtomicBoolean isDirtyData = new AtomicBoolean(true);
+    private int sortOrder = IdHelper.ID.incrementAndGet();
     private DataBlockProvider<T> parentDataBlockProvider;
     private int startPosition;
-    private final AtomicBoolean isDirtyData = new AtomicBoolean(true);
 
     public DataBlockGroupImpl(int dataBlockId, PositionType positionType, int defaultDataBlockId, DataBlockFactory<T> dataBlockFactory) {
         dataBlockProvider = new DataBlockProviderImpl<>(defaultDataBlockId, dataBlockFactory);
@@ -39,6 +37,11 @@ public class DataBlockGroupImpl<T> extends AbstractDataSource<T> implements Data
     @Override
     public int getSortOrder() {
         return sortOrder;
+    }
+
+    @Override
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     @Override
@@ -70,11 +73,6 @@ public class DataBlockGroupImpl<T> extends AbstractDataSource<T> implements Data
         if (ObjectUtils.nonNull(parentDataBlockProvider)) {
             parentDataBlockProvider = null;
         }
-    }
-
-    @Override
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
     }
 
     @NonNull

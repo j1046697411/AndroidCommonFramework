@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import org.jzl.lang.util.ObjectUtils;
 
-public class StaggeredGridLayoutManagerDividingLineCalculator implements LayoutManagerDividingLineCalculator<StaggeredGridLayoutManager>{
+public class StaggeredGridLayoutManagerDividingLineCalculator implements LayoutManagerDividingLineCalculator<StaggeredGridLayoutManager> {
 
     @Override
     public void calculationDividingLine(@NonNull RecyclerView recyclerView, @NonNull StaggeredGridLayoutManager layoutManager, @NonNull Rect outDividingLine, @NonNull DividerItemDecoration dividerItemDecoration, @NonNull View view, @NonNull RecyclerView.State state) {

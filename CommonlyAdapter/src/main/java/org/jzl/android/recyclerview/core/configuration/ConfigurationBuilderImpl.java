@@ -57,38 +57,10 @@ import java.util.concurrent.ExecutorService;
 
 class ConfigurationBuilderImpl<T, VH extends RecyclerView.ViewHolder> implements ConfigurationBuilder<T, VH> {
 
-    AdapterFactory<T, VH> adapterFactory = CommonlyAdapter::new;
-    ItemDataHolderFactory<T, VH> itemDataHolderFactory = ItemDataHolderImpl::new;
-    AdapterDataObserverFactory<T, VH> adapterDataObserverFactory = (configuration, adapter) -> new DefaultAdapterDataObservable(adapter);
-    LayoutManagerFactory layoutManagerFactory = (context, recyclerView1) -> new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-    ListenerManager<T, VH> listenerManager = new DefaultListenerManager<>();
-    ViewBindHelper<T, VH> viewBindHelper = new DefaultViewBindHelper<>();
-    ItemDataUpdateHelper<T, VH> itemDataUpdateHelper = new DefaultItemDataUpdateHelper<>();
     final LayoutManagerHelper<T, VH> layoutManagerHelper = LayoutManagerHelper.of();
-
-    DataProvider<T, VH> dataProvider;
-    IDiffDispatcher<T, VH> diffDispatcher = new AsyncDiffDispatcher<>();
-
-    EmptyLayoutManager<T, VH> emptyLayoutManager = new DefaultEmptyLayoutManager<>();
-    GroupManager<T, VH> groupManager = new DefaultGroupManager<>();
-
-    DataClassifier<T, VH> dataClassifier = (dataProvider, position) -> {
-        T data = dataProvider.get(position);
-        if (data instanceof Classifiable) {
-            return ((Classifiable) data).getType();
-        } else {
-            return 0;
-        }
-    };
-
-    Handler mainHandler;
-    ExecutorService executorService;
-    Activity currentActivity;
-
     final List<BinaryHolder<ItemBindingMatchPolicy, ItemViewFactory>> itemViewFactories = new ArrayList<>();
     final List<BinaryHolder<DataBindingMatchPolicy, DataBinder<T, VH>>> dataBinders = new ArrayList<>();
     final List<ItemDataUpdate<T, VH>> itemDataUpdates = new ArrayList<>();
-
     final List<OnAttachedToRecyclerViewListener<T, VH>> attachedToRecyclerViewListeners = new ArrayList<>();
     final List<OnCreatedViewHolderListener<T, VH>> createdViewHolderListeners = new ArrayList<>();
     final List<OnDetachedFromRecyclerViewListener<T, VH>> detachedFromRecyclerViewListeners = new ArrayList<>();
@@ -97,13 +69,31 @@ class ConfigurationBuilderImpl<T, VH extends RecyclerView.ViewHolder> implements
     final List<OnViewRecycledListener<T, VH>> viewRecycledListeners = new ArrayList<>();
     final List<BinaryHolder<DataBindingMatchPolicy, OnItemClickListener<T, VH>>> itemClickListeners = new ArrayList<>();
     final List<BinaryHolder<DataBindingMatchPolicy, OnItemLongClickListener<T, VH>>> itemLongClickListeners = new ArrayList<>();
-
     final List<Component<T, VH>> components = new ArrayList<>();
-
     final ViewHolderFactory<VH> viewHolderFactory;
-
-
     private final List<Plugin<T, VH>> plugins = new ArrayList<>();
+    AdapterFactory<T, VH> adapterFactory = CommonlyAdapter::new;
+    ItemDataHolderFactory<T, VH> itemDataHolderFactory = ItemDataHolderImpl::new;
+    AdapterDataObserverFactory<T, VH> adapterDataObserverFactory = (configuration, adapter) -> new DefaultAdapterDataObservable(adapter);
+    LayoutManagerFactory layoutManagerFactory = (context, recyclerView1) -> new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+    ListenerManager<T, VH> listenerManager = new DefaultListenerManager<>();
+    ViewBindHelper<T, VH> viewBindHelper = new DefaultViewBindHelper<>();
+    ItemDataUpdateHelper<T, VH> itemDataUpdateHelper = new DefaultItemDataUpdateHelper<>();
+    DataProvider<T, VH> dataProvider;
+    IDiffDispatcher<T, VH> diffDispatcher = new AsyncDiffDispatcher<>();
+    EmptyLayoutManager<T, VH> emptyLayoutManager = new DefaultEmptyLayoutManager<>();
+    GroupManager<T, VH> groupManager = new DefaultGroupManager<>();
+    DataClassifier<T, VH> dataClassifier = (dataProvider, position) -> {
+        T data = dataProvider.get(position);
+        if (data instanceof Classifiable) {
+            return ((Classifiable) data).getType();
+        } else {
+            return 0;
+        }
+    };
+    Handler mainHandler;
+    ExecutorService executorService;
+    Activity currentActivity;
 
     public ConfigurationBuilderImpl(ViewHolderFactory<VH> viewHolderFactory) {
         this.viewHolderFactory = ObjectUtils.requireNonNull(viewHolderFactory, "viewHolderFactory");

@@ -9,13 +9,13 @@ public class CompositeEmptyLayoutCallback implements EmptyLayoutManager.EmptyLay
 
     private final CopyOnWriteArrayList<EmptyLayoutManager.EmptyLayoutCallback> emptyLayoutCallbacks = new CopyOnWriteArrayList<>();
 
-    public void addEmptyLayoutCallback(EmptyLayoutManager.EmptyLayoutCallback emptyLayoutCallback){
-        if (ObjectUtils.nonNull(emptyLayoutCallback)){
+    public void addEmptyLayoutCallback(EmptyLayoutManager.EmptyLayoutCallback emptyLayoutCallback) {
+        if (ObjectUtils.nonNull(emptyLayoutCallback)) {
             this.emptyLayoutCallbacks.add(emptyLayoutCallback);
         }
     }
 
-    public void removeEmptyLayoutCallback(EmptyLayoutManager.EmptyLayoutCallback emptyLayoutCallback){
+    public void removeEmptyLayoutCallback(EmptyLayoutManager.EmptyLayoutCallback emptyLayoutCallback) {
         this.emptyLayoutCallbacks.remove(emptyLayoutCallback);
     }
 

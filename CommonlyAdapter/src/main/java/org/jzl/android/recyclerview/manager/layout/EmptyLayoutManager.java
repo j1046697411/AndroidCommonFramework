@@ -13,6 +13,8 @@ public interface EmptyLayoutManager<T, VH extends RecyclerView.ViewHolder> exten
 
     T getEmptyData();
 
+    EmptyLayoutManager<T, VH> setEmptyData(T data);
+
     int getItemType();
 
     boolean isEnable();
@@ -28,8 +30,6 @@ public interface EmptyLayoutManager<T, VH extends RecyclerView.ViewHolder> exten
     EmptyLayoutManager<T, VH> disable();
 
     EmptyLayoutManager<T, VH> setEmptyItemType(int itemType);
-
-    EmptyLayoutManager<T, VH> setEmptyData(T data);
 
     EmptyLayoutManager<T, VH> addEmptyLayoutCallback(EmptyLayoutCallback emptyLayoutCallback);
 

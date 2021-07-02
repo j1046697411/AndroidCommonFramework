@@ -22,12 +22,11 @@ import java.util.List;
 
 public class DefaultGroupManager<T, VH extends RecyclerView.ViewHolder> extends AbstractManager<T, VH> implements GroupManager<T, VH> {
 
+    private final SparseArray<GroupExpandable<T>> groups = new SparseArray<>();
+    private final DataBlockGroupFactory<T> dataBlockGroupFactory = (dataBlockProvider1, positionType, dataBlockId) -> new DataBlockGroupImpl<>(dataBlockId, positionType, DefaultGroupExpandable.CONTENT_DATA_BLOCK_ID, new DefaultDataBlockFactory<>());
     private DataBlockProvider<T> dataBlockProvider;
     private GroupHelper<T, VH> groupHelper;
-
-    private final SparseArray<GroupExpandable<T>> groups = new SparseArray<>();
     private boolean enable = false;
-    private final DataBlockGroupFactory<T> dataBlockGroupFactory = (dataBlockProvider1, positionType, dataBlockId) -> new DataBlockGroupImpl<>(dataBlockId, positionType, DefaultGroupExpandable.CONTENT_DATA_BLOCK_ID, new DefaultDataBlockFactory<>());
 
     @Override
     public void setup(ConfigurationBuilder<T, VH> builder) {

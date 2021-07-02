@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock<T> {
 
     private final int dataBlockId;
     private final PositionType positionType;
-
+    private final AtomicBoolean isDirtyData = new AtomicBoolean(true);
     private int sortOrder = IdHelper.ID.incrementAndGet();
+    private DataBlockProvider<T> dataBlockProvider;
+    private int startPosition;
     private final ArrayList<T> data = new ArrayList<T>() {
         @Override
         protected void removeRange(int fromIndex, int toIndex) {
@@ -30,10 +31,6 @@ public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock
         }
     };
 
-    private DataBlockProvider<T> dataBlockProvider;
-    private int startPosition;
-    private final AtomicBoolean isDirtyData = new AtomicBoolean(true);
-
     public DataBlockImpl(int dataBlockId, PositionType positionType) {
         this.dataBlockId = dataBlockId;
         this.positionType = positionType;
@@ -42,6 +39,11 @@ public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock
     @Override
     public int getSortOrder() {
         return sortOrder;
+    }
+
+    @Override
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     @Override
@@ -78,11 +80,6 @@ public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock
     @Override
     protected List<T> proxy() {
         return data;
-    }
-
-    @Override
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
     }
 
     @Override
@@ -146,7 +143,7 @@ public class DataBlockImpl<T> extends AbstractDataSource<T> implements DataBlock
 
     @Override
     public void clear() {
-        if (isEmpty()){
+        if (isEmpty()) {
             return;
         }
         int oldSize = size();

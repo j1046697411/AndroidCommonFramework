@@ -29,11 +29,11 @@ class RecyclerViewConfigurationImpl<T, VH extends RecyclerView.ViewHolder> exten
     @Override
     public Activity getCurrentActivity() {
         Activity activity = super.getCurrentActivity();
-        if (ObjectUtils.nonNull(activity)){
+        if (ObjectUtils.nonNull(activity)) {
             return activity;
         }
         Context context = getRecyclerView().getContext();
-        if (context instanceof Activity){
+        if (context instanceof Activity) {
             return (Activity) context;
         }
         return null;

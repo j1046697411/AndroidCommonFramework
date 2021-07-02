@@ -18,16 +18,24 @@ public class ScaleInAnimationFactory<VH extends RecyclerView.ViewHolder> impleme
         this.fromValue = fromValue;
     }
 
+    public static <VH extends RecyclerView.ViewHolder> ScaleInAnimationFactory<VH> of(ScaleType scaleType, float fromValue) {
+        return new ScaleInAnimationFactory<>(scaleType, fromValue);
+    }
+
+    public static <VH extends RecyclerView.ViewHolder> ScaleInAnimationFactory<VH> of(float fromValue) {
+        return of(ScaleType.XY, fromValue);
+    }
+
     @Override
     public Animator animator(VH holder) {
-        switch (scaleType){
-            case X:{
+        switch (scaleType) {
+            case X: {
                 return ObjectAnimator.ofFloat(holder.itemView, "scaleX", fromValue, 1);
             }
-            case Y:{
+            case Y: {
                 return ObjectAnimator.ofFloat(holder.itemView, "scaleY", fromValue, 1);
             }
-            default:{
+            default: {
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playTogether(
                         ObjectAnimator.ofFloat(holder.itemView, "scaleX", fromValue, 1),
@@ -40,14 +48,6 @@ public class ScaleInAnimationFactory<VH extends RecyclerView.ViewHolder> impleme
 
     public enum ScaleType {
         X, Y, XY
-    }
-
-    public static <VH extends RecyclerView.ViewHolder> ScaleInAnimationFactory<VH> of(ScaleType scaleType, float fromValue){
-        return new ScaleInAnimationFactory<>(scaleType, fromValue);
-    }
-
-    public static <VH extends RecyclerView.ViewHolder> ScaleInAnimationFactory<VH> of(float fromValue){
-        return of(ScaleType.XY, fromValue);
     }
 
 }

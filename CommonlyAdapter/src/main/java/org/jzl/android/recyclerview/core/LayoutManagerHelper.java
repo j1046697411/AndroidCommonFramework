@@ -19,15 +19,18 @@ import org.jzl.lang.util.ObjectUtils;
 
 public final class LayoutManagerHelper<T, VH extends RecyclerView.ViewHolder> extends AbstractManager<T, VH> {
     private static final Logger log = Logger.logger(LayoutManagerHelper.class);
-
+    private final SparseIntArray spanSizes = new SparseIntArray();
     private LayoutManagerFactory layoutManagerFactory;
     private RecyclerView recyclerView;
     private Configuration<T, VH> configuration;
     private SpanSizeLookup<T> spanSizeLookup;
     private EmptyLayoutManager<T, VH> emptyLayoutManager;
-    private final SparseIntArray spanSizes = new SparseIntArray();
 
     private LayoutManagerHelper() {
+    }
+
+    public static <T, VH extends RecyclerView.ViewHolder> LayoutManagerHelper<T, VH> of() {
+        return new LayoutManagerHelper<>();
     }
 
     @Override
@@ -116,10 +119,6 @@ public final class LayoutManagerHelper<T, VH extends RecyclerView.ViewHolder> ex
     public LayoutManagerHelper<T, VH> setSpanSizeLookup(SpanSizeLookup<T> spanSizeLookup) {
         this.spanSizeLookup = spanSizeLookup;
         return this;
-    }
-
-    public static <T, VH extends RecyclerView.ViewHolder> LayoutManagerHelper<T, VH> of() {
-        return new LayoutManagerHelper<>();
     }
 
 }

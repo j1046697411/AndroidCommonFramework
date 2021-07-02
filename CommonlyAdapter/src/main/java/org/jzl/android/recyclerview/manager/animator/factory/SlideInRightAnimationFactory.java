@@ -12,13 +12,13 @@ public class SlideInRightAnimationFactory<VH extends RecyclerView.ViewHolder> im
     private SlideInRightAnimationFactory() {
     }
 
+    public static <VH extends RecyclerView.ViewHolder> SlideInRightAnimationFactory<VH> of() {
+        return new SlideInRightAnimationFactory<>();
+    }
+
     @Override
     public Animator animator(VH holder) {
         return ObjectAnimator.ofFloat(holder.itemView, "translationX", holder.itemView.getMeasuredWidth(), 0);
-    }
-
-    public static <VH extends RecyclerView.ViewHolder> SlideInRightAnimationFactory<VH> of() {
-        return new SlideInRightAnimationFactory<>();
     }
 
 }

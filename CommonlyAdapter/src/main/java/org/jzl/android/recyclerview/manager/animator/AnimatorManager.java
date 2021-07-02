@@ -16,16 +16,19 @@ import org.jzl.lang.util.ObjectUtils;
 public class AnimatorManager<T, VH extends RecyclerView.ViewHolder> extends AbstractManager<T, VH> implements Component<T, VH>, OnViewAttachedToWindowListener<T, VH> {
 
     private static final LinearInterpolator INTERPOLATOR = new LinearInterpolator();
-
+    private final AnimatorFactory<VH> animatorFactory;
     private boolean enableAnimator = true;
     private long duration = 400;
     private long startDelay = 0;
     private TimeInterpolator interpolator = INTERPOLATOR;
     private int lastPosition = -1;
-    private final AnimatorFactory<VH> animatorFactory;
 
     AnimatorManager(AnimatorFactory<VH> animatorFactory) {
         this.animatorFactory = animatorFactory;
+    }
+
+    public static <T, VH extends RecyclerView.ViewHolder> AnimatorManager<T, VH> of(AnimatorFactory<VH> animatorFactory) {
+        return new AnimatorManager<T, VH>(animatorFactory);
     }
 
     @Override
@@ -50,36 +53,32 @@ public class AnimatorManager<T, VH extends RecyclerView.ViewHolder> extends Abst
         }
     }
 
-    private boolean isEnableAnimator(){
+    private boolean isEnableAnimator() {
         return enableAnimator;
     }
 
-    public AnimatorManager<T, VH> setAnimatorFactory(AnimatorFactory<VH> animatorFactory){
+    public AnimatorManager<T, VH> setAnimatorFactory(AnimatorFactory<VH> animatorFactory) {
         return this;
     }
 
-    public AnimatorManager<T, VH> setDuration(long duration){
+    public AnimatorManager<T, VH> setDuration(long duration) {
         this.duration = duration;
         return this;
     }
 
-    public AnimatorManager<T, VH> setStartDelay(long startDelay){
+    public AnimatorManager<T, VH> setStartDelay(long startDelay) {
         this.startDelay = startDelay;
         return this;
     }
 
-    public AnimatorManager<T, VH> setInterpolator(TimeInterpolator interpolator){
+    public AnimatorManager<T, VH> setInterpolator(TimeInterpolator interpolator) {
         this.interpolator = ObjectUtils.get(interpolator, this.interpolator);
         return this;
     }
 
-    public AnimatorManager<T, VH> enableAnimator(boolean enableAnimator){
+    public AnimatorManager<T, VH> enableAnimator(boolean enableAnimator) {
         this.enableAnimator = enableAnimator;
         return this;
-    }
-
-    public static <T, VH extends RecyclerView.ViewHolder> AnimatorManager<T, VH> of(AnimatorFactory<VH> animatorFactory){
-        return new AnimatorManager<T, VH>(animatorFactory);
     }
 
 }

@@ -7,18 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jzl.android.recyclerview.manager.animator.AnimatorFactory;
 
-public class SlideInLeftAnimationFactory<VH  extends RecyclerView.ViewHolder> implements AnimatorFactory<VH> {
+public class SlideInLeftAnimationFactory<VH extends RecyclerView.ViewHolder> implements AnimatorFactory<VH> {
 
-    private SlideInLeftAnimationFactory(){
+    private SlideInLeftAnimationFactory() {
+    }
+
+    public static <VH extends RecyclerView.ViewHolder> SlideInLeftAnimationFactory<VH> of() {
+        return new SlideInLeftAnimationFactory<>();
     }
 
     @Override
     public Animator animator(VH holder) {
         return ObjectAnimator.ofFloat(holder.itemView, "translationX", -holder.itemView.getMeasuredWidth(), 0);
-    }
-
-    public static <VH extends RecyclerView.ViewHolder> SlideInLeftAnimationFactory<VH> of(){
-        return new SlideInLeftAnimationFactory<>();
     }
 
 }

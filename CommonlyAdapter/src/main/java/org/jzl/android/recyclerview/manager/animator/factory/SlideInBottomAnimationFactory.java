@@ -11,13 +11,13 @@ public class SlideInBottomAnimationFactory<VH extends RecyclerView.ViewHolder> i
     private SlideInBottomAnimationFactory() {
     }
 
+    public static <VH extends RecyclerView.ViewHolder> SlideInBottomAnimationFactory<VH> of() {
+        return new SlideInBottomAnimationFactory<>();
+    }
+
     @Override
     public Animator animator(VH holder) {
         return ObjectAnimator.ofFloat(holder.itemView, "translationY", holder.itemView.getMeasuredHeight(), 0);
-    }
-
-    public static <VH extends RecyclerView.ViewHolder> SlideInBottomAnimationFactory<VH> of(){
-        return new SlideInBottomAnimationFactory<>();
     }
 
 }

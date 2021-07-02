@@ -3,7 +3,6 @@ package org.jzl.android.recyclerview.util.datablock.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.jzl.android.recyclerview.util.Logger;
 import org.jzl.android.recyclerview.util.datablock.DataSource;
 import org.jzl.lang.util.CollectionUtils;
 

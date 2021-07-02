@@ -12,7 +12,7 @@ public interface AdapterDataObservable {
 
     void notifyDataSetChanged();
 
-    void notifyItemChanged(int position) ;
+    void notifyItemChanged(int position);
 
     void notifyItemChanged(int position, @Nullable Object payload);
 
@@ -24,9 +24,9 @@ public interface AdapterDataObservable {
 
     void notifyItemMoved(int fromPosition, int toPosition);
 
-    void notifyItemRangeInserted(int positionStart, int itemCount) ;
+    void notifyItemRangeInserted(int positionStart, int itemCount);
 
-    void notifyItemRemoved(int position) ;
+    void notifyItemRemoved(int position);
 
     void notifyItemRangeRemoved(int positionStart, int itemCount);
 

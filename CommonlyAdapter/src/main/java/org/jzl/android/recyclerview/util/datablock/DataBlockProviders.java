@@ -2,7 +2,6 @@ package org.jzl.android.recyclerview.util.datablock;
 
 import androidx.annotation.NonNull;
 
-import org.jzl.android.recyclerview.util.datablock.impl.DataBlockImpl;
 import org.jzl.android.recyclerview.util.datablock.impl.DataBlockProviderImpl;
 import org.jzl.android.recyclerview.util.datablock.impl.DefaultDataBlockFactory;
 

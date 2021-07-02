@@ -12,9 +12,9 @@ public class CommonlyModel implements Identifiable, Classifiable, Selectable, Sp
     private static final AtomicLong ID = new AtomicLong(0);
 
     private final long incrementId;
-    private boolean checked;
     private final Extractable ext;
     private final Object data;
+    private boolean checked;
     private SpanSizable spanSize;
     private int type;
 
@@ -24,6 +24,14 @@ public class CommonlyModel implements Identifiable, Classifiable, Selectable, Sp
         this.type = type;
         this.spanSize = spanSize;
         this.incrementId = ID.incrementAndGet();
+    }
+
+    public static CommonlyModel of(Object data, int type) {
+        return of(data, type, SpanSize.ONE);
+    }
+
+    public static CommonlyModel of(Object data, int type, SpanSizable spanSize) {
+        return new CommonlyModel(data, type, spanSize);
     }
 
     @Override
@@ -123,20 +131,12 @@ public class CommonlyModel implements Identifiable, Classifiable, Selectable, Sp
         return type;
     }
 
-    public void setSpanSize(SpanSizable spanSize) {
-        this.spanSize = spanSize;
-    }
-
     public void setType(int type) {
         this.type = type;
     }
 
-    public static CommonlyModel of(Object data, int type) {
-        return of(data, type, SpanSize.ONE);
-    }
-
-    public static CommonlyModel of(Object data, int type, SpanSizable spanSize) {
-        return new CommonlyModel(data, type, spanSize);
+    public void setSpanSize(SpanSizable spanSize) {
+        this.spanSize = spanSize;
     }
 
     @Override
