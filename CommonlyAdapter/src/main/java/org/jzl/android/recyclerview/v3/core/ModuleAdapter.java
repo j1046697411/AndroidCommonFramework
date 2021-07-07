@@ -1,15 +1,22 @@
 package org.jzl.android.recyclerview.v3.core;
 
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jzl.android.recyclerview.v3.core.module.IAdapterModule;
+import org.jzl.android.recyclerview.v3.core.module.IModule;
+import org.jzl.android.recyclerview.v3.core.vh.ModuleAdapterViewHolder;
+import org.jzl.lang.util.StringUtils;
+
 import java.util.List;
 
-public class ModuleAdapter<T, VH extends IViewHolder> extends RecyclerView.Adapter<ModuleAdapter.ModuleAdapterViewHolder<T, VH>> {
+public class ModuleAdapter<T, VH extends IViewHolder> extends
+        RecyclerView.Adapter<ModuleAdapterViewHolder<T, VH>> implements IModule<T, VH> {
 
     @NonNull
     private final IConfiguration<T, VH> configuration;
@@ -17,23 +24,42 @@ public class ModuleAdapter<T, VH extends IViewHolder> extends RecyclerView.Adapt
     @NonNull
     private final IAdapterModule<T, VH> adapterModule;
 
-    private IOptions<T, VH> options;
-
     public ModuleAdapter(@NonNull IConfiguration<T, VH> configuration) {
         this.configuration = configuration;
         this.adapterModule = configuration.getAdapterModule();
     }
 
+    @NonNull
     @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        options = adapterModule.setup(configuration);
+    public IOptions<T, VH> setup(@NonNull IConfiguration<?, ?> configuration, @NonNull IDataGetter<T> dataGetter) {
+        return adapterModule.setup(configuration, dataGetter);
     }
 
     @NonNull
     @Override
     public ModuleAdapterViewHolder<T, VH> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return options.createViewHolder(configuration, parent, viewType);
+        return createViewHolder(configuration.getOptions(), parent, viewType);
+    }
+
+    //创建viewHolder逻辑
+    private ModuleAdapterViewHolder<T, VH> createViewHolder(IOptions<?, VH> options, ViewGroup parent, int viewType) {
+        IViewFactoryOwner<VH> viewFactoryOwner = options.get(viewType);
+        ModuleAdapterViewHolder<T, VH> moduleAdapterViewHolder;
+        if (viewFactoryOwner.getOptions() == options) {//说明是module自己添加的模块，需要用module自己的逻辑去处理
+            IViewFactory viewFactory = viewFactoryOwner.getViewFactory();
+            IViewHolderFactory<VH> viewHolderFactory = options.getViewHolderFactory();
+            View itemView = viewFactory.create(configuration.getLayoutInflater(), parent, viewType);
+            VH viewHolder = viewHolderFactory.createViewHolder(options, itemView, viewType);
+            moduleAdapterViewHolder = createViewHolder(options, itemView, viewHolder);
+        } else {
+            moduleAdapterViewHolder = createViewHolder(viewFactoryOwner.getOptions(), parent, viewType);
+        }
+        options.notifyCreatedViewHolder(moduleAdapterViewHolder);
+        return moduleAdapterViewHolder;
+    }
+
+    private ModuleAdapterViewHolder<T, VH> createViewHolder(IOptions<?, VH> options, View itemView, VH viewHolder) {
+        return new ModuleAdapterViewHolder<>(options, itemView, viewHolder);
     }
 
     @Override
@@ -42,7 +68,7 @@ public class ModuleAdapter<T, VH extends IViewHolder> extends RecyclerView.Adapt
 
     @Override
     public void onBindViewHolder(@NonNull ModuleAdapterViewHolder<T, VH> holder, int position, @NonNull List<Object> payloads) {
-        holder.binding(options.getDataBinder(), adapterModule.getItemData(configuration, configuration.getDataProvider(), position), payloads);
+        holder.binding(configuration.getOptions().getDataBinder(), configuration.getDataGetter().getData(position), payloads);
     }
 
     @Override
@@ -60,49 +86,34 @@ public class ModuleAdapter<T, VH extends IViewHolder> extends RecyclerView.Adapt
         return adapterModule.getItemId(configuration, configuration.getDataProvider(), position);
     }
 
-    public static class ModuleAdapterViewHolder<T, VH extends IViewHolder> extends RecyclerView.ViewHolder implements IContext {
+    @Override
+    public void onViewAttachedToWindow(@NonNull ModuleAdapterViewHolder<T, VH> holder) {
+        super.onViewAttachedToWindow(holder);
+        configuration.getOptions().notifyViewAttachedToWindow(holder);
+    }
 
-        @NonNull
-        private final IOptions<?, ?> options;
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ModuleAdapterViewHolder<T, VH> holder) {
+        super.onViewDetachedFromWindow(holder);
+        configuration.getOptions().notifyViewDetachedFromWindow(holder);
+    }
 
-        @NonNull
-        private final VH viewHolder;
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        configuration.getOptions().notifyAttachedToRecyclerView(recyclerView);
+    }
 
-        private List<Object> payloads;
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        configuration.getOptions().notifyDetachedFromRecyclerView(recyclerView);
+    }
 
 
-        public ModuleAdapterViewHolder(@NonNull IOptions<?, ?> options, @NonNull View itemView, @NonNull VH viewHolder) {
-            super(itemView);
-            this.options = options;
-            this.viewHolder = viewHolder;
-        }
-
-        public void binding(IDataBinder<T, VH> dataBinder, T data, @NonNull List<Object> payloads) {
-            this.payloads = payloads;
-            dataBinder.binding(this, viewHolder, data);
-        }
-
-        @NonNull
-        @Override
-        public IConfiguration<?, ?> getConfiguration() {
-            return options.getConfiguration();
-        }
-
-        @NonNull
-        @Override
-        public IOptions<?, ?> getOptions() {
-            return options;
-        }
-
-        @NonNull
-        @Override
-        public List<Object> getPayloads() {
-            return payloads;
-        }
-
-        @NonNull
-        public VH getViewHolder() {
-            return viewHolder;
-        }
+    @Override
+    public void onViewRecycled(@NonNull ModuleAdapterViewHolder<T, VH> holder) {
+        super.onViewRecycled(holder);
+        configuration.getOptions().notifyViewRecycled(holder);
     }
 }

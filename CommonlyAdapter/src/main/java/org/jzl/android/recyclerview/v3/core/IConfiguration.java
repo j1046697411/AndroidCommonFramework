@@ -3,20 +3,35 @@ package org.jzl.android.recyclerview.v3.core;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.recyclerview.widget.RecyclerView;
 
-public interface IConfiguration<T, VH extends IViewHolder> {
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManager;
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManagerBuilder;
+import org.jzl.android.recyclerview.v3.core.listeners.ListenerManager;
+import org.jzl.android.recyclerview.v3.core.listeners.OnClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnCreatedViewHolderListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnLongClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.module.IAdapterModule;
+import org.jzl.android.recyclerview.v3.core.module.IModule;
+import org.jzl.lang.fun.Function;
+
+public interface IConfiguration<T, VH extends IViewHolder> extends IDataGetterOwner<T> , IListenerManagerBuilder<T, VH, IConfiguration<T, VH>> {
 
     @NonNull
-    static <T, VH extends IViewHolder> IConfigurationBuilder<T, VH> builder() {
-        return Configuration.builder();
+    static <T, VH extends IViewHolder> IConfigurationBuilder<T, VH> builder(@NonNull IViewHolderFactory<VH> viewHolderFactory) {
+        return Configuration.builder(viewHolderFactory);
     }
 
     @NonNull
-    default <T1, VH1 extends IViewHolder> IOptionsBuilder<T1, VH1> options(@NonNull IModule<T1, VH1> module, @NonNull IViewHolderFactory<T1, VH1> viewHolderFactory) {
-        return Options.builder(this, module, viewHolderFactory);
+    default <T1, VH1 extends IViewHolder> IOptionsBuilder<T1, VH1> options(@NonNull IModule<T1, VH1> module, @NonNull IViewHolderFactory<VH1> viewHolderFactory, @NonNull IDataGetter<T1> dataGetter, @NonNull IListenerManager<T1, VH1> listenerManager) {
+        return Options.builder(this, module, viewHolderFactory, dataGetter, listenerManager);
     }
+
+    @NonNull
+    default <T1, VH1 extends IViewHolder> IOptionsBuilder<T1, VH1> options(@NonNull IModule<T1, VH1> module, @NonNull IViewHolderFactory<VH1> viewHolderFactory, @NonNull IDataGetter<T1> dataGetter){
+        return options(module, viewHolderFactory, dataGetter, new ListenerManager<>());
+    }
+
 
     @NonNull
     IAdapterModule<T, VH> getAdapterModule();
@@ -33,26 +48,14 @@ public interface IConfiguration<T, VH extends IViewHolder> {
     @NonNull
     LayoutInflater getLayoutInflater();
 
-    interface IConfigurationBuilder<T, VH extends IViewHolder> {
+    @NonNull
+    @Override
+    IDataGetter<T> getDataGetter();
 
-        @NonNull
-        IConfigurationBuilder<T, VH> setDataProvider(IDataProvider<T> dataProvider);
+    @NonNull
+    IOptions<T, VH> getOptions();
 
-        @NonNull
-        IConfigurationBuilder<T, VH> setDataClassifier(IDataClassifier<T, VH> dataClassifier);
+    @NonNull
+    RecyclerView.Adapter<?> getAdapter();
 
-        @NonNull
-        IConfigurationBuilder<T, VH> setIdentityProvider(IIdentityProvider<T, VH> identityProvider);
-
-        @NonNull
-        <T1, VH1 extends VH> IConfigurationBuilder<T, VH> registered(@NonNull IModule<T1, VH1> module, @NonNull Function<T, T1> mapper);
-
-        @NonNull
-        default <VH1 extends VH> IConfigurationBuilder<T, VH> registered(@NonNull IModule<T, VH1> module) {
-            return registered(module, target -> target);
-        }
-
-        @NonNull
-        IConfiguration<T, VH> build(@NonNull RecyclerView recyclerView);
-    }
 }

@@ -2,12 +2,12 @@ package org.jzl.android.recyclerview.v3.core;
 
 import androidx.annotation.NonNull;
 
-public interface IViewFactoryOwner extends Comparable<IViewFactoryOwner> {
+public interface IViewFactoryOwner<VH extends IViewHolder> extends Comparable<IViewFactoryOwner<?>> {
 
     int DEFAULT_PRIORITY = 10;
 
     @NonNull
-    IOptions<?, ?> getOptions();
+    IOptions<?, VH> getOptions();
 
     @NonNull
     IMatchPolicy getMatchPolicy();
@@ -18,7 +18,7 @@ public interface IViewFactoryOwner extends Comparable<IViewFactoryOwner> {
     int getPriority();
 
     @Override
-    default int compareTo(IViewFactoryOwner o) {
+    default int compareTo(IViewFactoryOwner<?> o) {
         return Integer.compare(getPriority(), o.getPriority());
     }
 }

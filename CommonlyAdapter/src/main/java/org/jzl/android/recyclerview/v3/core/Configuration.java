@@ -3,20 +3,29 @@ package org.jzl.android.recyclerview.v3.core;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jzl.android.recyclerview.v3.model.Identifiable;
-import org.jzl.lang.util.ObjectUtils;
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManager;
+import org.jzl.android.recyclerview.v3.core.listeners.OnAttachedToRecyclerViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnCreatedViewHolderListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnDetachedFromRecyclerViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnLongClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnViewAttachedToWindowListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnViewDetachedFromWindowListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnViewRecycledListener;
+import org.jzl.android.recyclerview.v3.core.module.IAdapterModule;
 
-public class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH> {
+class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH>, IDataGetter<T> {
 
     private final IAdapterModule<T, VH> adapterModule;
     private final IDataProvider<T> dataProvider;
     private final IDataClassifier<T, VH> dataClassifier;
     private final IIdentityProvider<T, VH> identityProvider;
     private final LayoutInflater layoutInflater;
+    private final ModuleAdapter<T, VH> adapter;
+    private final IOptions<T, VH> options;
+    private final IListenerManager<T, VH> listenerManager;
 
     Configuration(ConfigurationBuilder<T, VH> builder, LayoutInflater layoutInflater) {
         this.adapterModule = builder.adapterModule;
@@ -24,10 +33,13 @@ public class Configuration<T, VH extends IViewHolder> implements IConfiguration<
         this.identityProvider = builder.identityProvider;
         this.dataProvider = builder.dataProvider;
         this.layoutInflater = layoutInflater;
+        this.listenerManager = builder.listenerManager;
+        this.adapter = new ModuleAdapter<>(this);
+        this.options = adapter.setup(this, this);
     }
 
-    public static <T, VH extends IViewHolder> ConfigurationBuilder<T, VH> builder() {
-        return new ConfigurationBuilder<>();
+    public static <T, VH extends IViewHolder> ConfigurationBuilder<T, VH> builder(@NonNull IViewHolderFactory<VH> viewHolderFactory) {
+        return new ConfigurationBuilder<>(viewHolderFactory);
     }
 
     @NonNull
@@ -60,55 +72,81 @@ public class Configuration<T, VH extends IViewHolder> implements IConfiguration<
         return layoutInflater;
     }
 
-    public static class ConfigurationBuilder<T, VH extends IViewHolder> implements IConfiguration.IConfigurationBuilder<T, VH> {
+    @NonNull
+    @Override
+    public IDataGetter<T> getDataGetter() {
+        return this;
+    }
 
-        private final IAdapterModule<T, VH> adapterModule = new MultipleAdapterModule<>();
-        private IDataProvider<T> dataProvider;
-        private IDataClassifier<T, VH> dataClassifier;
-        private IIdentityProvider<T, VH> identityProvider = (configuration, dataProvider, position) -> {
-            T data = dataProvider.get(position);
-            if (data instanceof Identifiable) {
-                return ((Identifiable) data).getId();
-            }
-            return RecyclerView.NO_ID;
-        };
+    @Override
+    public T getData(int position) {
+        return adapterModule.getItemData(this, dataProvider, position);
+    }
 
-        @NonNull
-        @Override
-        public IConfigurationBuilder<T, VH> setDataProvider(IDataProvider<T> dataProvider) {
-            this.dataProvider = dataProvider;
-            return this;
-        }
+    @NonNull
+    @Override
+    public IOptions<T, VH> getOptions() {
+        return options;
+    }
 
-        @NonNull
-        @Override
-        public IConfigurationBuilder<T, VH> setDataClassifier(IDataClassifier<T, VH> dataClassifier) {
-            this.dataClassifier = ObjectUtils.get(dataClassifier, this.dataClassifier);
-            return this;
-        }
+    @NonNull
+    @Override
+    public RecyclerView.Adapter<?> getAdapter() {
+        return adapter;
+    }
 
-        @NonNull
-        @Override
-        public IConfigurationBuilder<T, VH> setIdentityProvider(IIdentityProvider<T, VH> identityProvider) {
-            this.identityProvider = ObjectUtils.get(identityProvider, this.identityProvider);
-            return this;
-        }
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addOnCreatedViewHolderListener(createdViewHolderListener, bindPolicy);
+        return this;
+    }
 
-        @NonNull
-        public <T1, VH1 extends VH> IConfigurationBuilder<T, VH> registered(@NonNull IModule<T1, VH1> module, @NonNull Function<T, T1> mapper) {
-            adapterModule.registered(module, mapper);
-            return this;
-        }
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addOnClickItemViewListener(@NonNull OnClickItemViewListener<T, VH> clickItemViewListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addOnClickItemViewListener(clickItemViewListener, bindPolicy);
+        return this;
+    }
 
-        @NonNull
-        @Override
-        public IConfiguration<T, VH> build(@NonNull RecyclerView recyclerView) {
-            Configuration<T, VH> configuration = new Configuration<>(this, LayoutInflater.from(recyclerView.getContext()));
-            ModuleAdapter<T, VH> adapter = new ModuleAdapter<>(configuration);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
-            return configuration;
-        }
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addOnLongClickItemViewListener(@NonNull OnLongClickItemViewListener<T, VH> longClickItemViewListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addOnLongClickItemViewListener(longClickItemViewListener, bindPolicy);
+        return this;
+    }
 
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addViewAttachedToWindowListener(@NonNull OnViewAttachedToWindowListener<T, VH> viewAttachedToWindowListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addViewAttachedToWindowListener(viewAttachedToWindowListener, bindPolicy);
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addViewDetachedFromWindowListener(@NonNull OnViewDetachedFromWindowListener<T, VH> viewDetachedFromWindowListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addViewDetachedFromWindowListener(viewDetachedFromWindowListener, bindPolicy);
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addAttachedToRecyclerViewListener(@NonNull OnAttachedToRecyclerViewListener<T, VH> attachedToRecyclerViewListener) {
+        listenerManager.addAttachedToRecyclerViewListener(attachedToRecyclerViewListener);
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addDetachedFromRecyclerViewListener(@NonNull OnDetachedFromRecyclerViewListener<T, VH> detachedFromRecyclerViewListener) {
+        listenerManager.addDetachedFromRecyclerViewListener(detachedFromRecyclerViewListener);
+        return this;
+    }
+
+    @Override
+    public IConfiguration<T, VH> addViewRecycledListener(@NonNull OnViewRecycledListener<T, VH> viewRecycledListener, @NonNull IBindPolicy bindPolicy) {
+        listenerManager.addViewRecycledListener(viewRecycledListener, bindPolicy);
+        return this;
     }
 }

@@ -1,12 +1,18 @@
 package org.jzl.android.recyclerview.v3.core;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-public interface IOptions<T, VH extends IViewHolder> extends IViewHolderOwner<T, VH>,
-        IViewFactoryStore, IDataBinderStore<T, VH> {
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManager;
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManagerBuilder;
+import org.jzl.android.recyclerview.v3.core.listeners.IListenerManagerOwner;
+import org.jzl.android.recyclerview.v3.core.listeners.OnClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnCreatedViewHolderListener;
+import org.jzl.android.recyclerview.v3.core.listeners.OnLongClickItemViewListener;
+import org.jzl.android.recyclerview.v3.core.module.IModule;
+
+public interface IOptions<T, VH extends IViewHolder> extends IViewHolderFactoryOwner<VH>,
+        IViewFactoryStore<VH>, IDataBinderStore<T, VH>, IDataGetterOwner<T> , IListenerManagerOwner<T, VH> {
 
     @NonNull
     IConfiguration<?, ?> getConfiguration();
@@ -16,7 +22,7 @@ public interface IOptions<T, VH extends IViewHolder> extends IViewHolderOwner<T,
 
     @NonNull
     @Override
-    IViewHolderFactory<T, VH> getViewHolderFactory();
+    IViewHolderFactory<VH> getViewHolderFactory();
 
     @NonNull
     @Override
@@ -28,12 +34,12 @@ public interface IOptions<T, VH extends IViewHolder> extends IViewHolderOwner<T,
 
     @NonNull
     @Override
-    default IOptions<?, ?> getOptions() {
+    default IOptions<?, VH> getOptions() {
         return this;
     }
 
     @Override
-    IViewFactoryOwner get(int itemViewType);
+    IViewFactoryOwner<VH> get(int itemViewType);
 
     @Override
     IDataBinderOwner<T, VH> get(IContext context);
@@ -46,12 +52,21 @@ public interface IOptions<T, VH extends IViewHolder> extends IViewHolderOwner<T,
     @Override
     IDataBinder<T, VH> getDataBinder();
 
-    @NonNull
-    ModuleAdapter.ModuleAdapterViewHolder<T, VH> createViewHolder(@NonNull IConfiguration<?, ?> configuration, @NonNull ViewGroup parent, int viewType);
-
     int getPriority();
 
     @NonNull
-    VH createViewHolder(@NonNull View itemView, int itemViewType);
+    @Override
+    IListenerManager<T, VH> getListenerManager();
 
+    void notifyCreatedViewHolder(@NonNull IViewHolderOwner<VH> viewHolderOwner);
+
+    void notifyViewAttachedToWindow(@NonNull IViewHolderOwner<VH> viewHolderOwner);
+
+    void notifyViewDetachedFromWindow(@NonNull IViewHolderOwner<VH> viewHolderOwner);
+
+    void notifyAttachedToRecyclerView(@NonNull RecyclerView recyclerView);
+
+    void notifyDetachedFromRecyclerView(@NonNull RecyclerView recyclerView);
+
+    void notifyViewRecycled(@NonNull IViewHolderOwner<VH> viewHolderOwner);
 }

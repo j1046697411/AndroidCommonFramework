@@ -12,13 +12,13 @@ import org.jzl.lang.util.ObjectUtils;
 import java.util.Collections;
 import java.util.List;
 
-class ViewFactoryStore implements IViewFactoryStore, IViewFactory, IMatchPolicy {
+class ViewFactoryStore<T, VH extends IViewHolder> implements IViewFactoryStore<VH>, IViewFactory, IMatchPolicy {
 
-    private final IOptions<?, ?> options;
-    private final List<IViewFactoryOwner> viewFactoryOwners;
-    private final List<IViewFactoryOwner> unmodifiableViewFactoryOwners;
+    private final IOptions<T, VH> options;
+    private final List<IViewFactoryOwner<VH>> viewFactoryOwners;
+    private final List<IViewFactoryOwner<VH>> unmodifiableViewFactoryOwners;
 
-    ViewFactoryStore(IOptions<?, ?> options, List<IViewFactoryOwner> viewFactoryOwners) {
+    ViewFactoryStore(IOptions<T, VH> options, List<IViewFactoryOwner<VH>> viewFactoryOwners) {
         this.viewFactoryOwners = viewFactoryOwners;
         Collections.sort(this.viewFactoryOwners, Collections.reverseOrder());
         this.options = options;
@@ -27,7 +27,7 @@ class ViewFactoryStore implements IViewFactoryStore, IViewFactory, IMatchPolicy 
 
     @NonNull
     @Override
-    public IOptions<?, ?> getOptions() {
+    public IOptions<T, VH> getOptions() {
         return options;
     }
 
@@ -49,13 +49,13 @@ class ViewFactoryStore implements IViewFactoryStore, IViewFactory, IMatchPolicy 
     }
 
     @Override
-    public IViewFactoryOwner get(int itemViewType) {
+    public IViewFactoryOwner<VH> get(int itemViewType) {
         return ForeachUtils.findByOne(this.viewFactoryOwners, target -> target.getMatchPolicy().match(itemViewType));
     }
 
     @NonNull
     @Override
-    public List<IViewFactoryOwner> getUnmodifiableViewFactoryOwners() {
+    public List<IViewFactoryOwner<VH>> getUnmodifiableViewFactoryOwners() {
         return unmodifiableViewFactoryOwners;
     }
 

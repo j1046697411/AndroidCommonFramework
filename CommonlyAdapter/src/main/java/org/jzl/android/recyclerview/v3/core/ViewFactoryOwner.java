@@ -2,17 +2,17 @@ package org.jzl.android.recyclerview.v3.core;
 
 import androidx.annotation.NonNull;
 
-class ViewFactoryOwner implements IViewFactoryOwner {
+class ViewFactoryOwner<T, VH extends IViewHolder> implements IViewFactoryOwner<VH> {
 
     @NonNull
-    private final IOptions<?, ?> options;
+    private final IOptions<T, VH> options;
     @NonNull
     private final IViewFactory viewFactory;
     @NonNull
     private final IMatchPolicy matchPolicy;
     private final int priority;
 
-    ViewFactoryOwner(@NonNull IOptions<?, ?> options, @NonNull IViewFactory viewFactory, @NonNull IMatchPolicy matchPolicy, int priority) {
+    ViewFactoryOwner(@NonNull IOptions<T, VH> options, @NonNull IViewFactory viewFactory, @NonNull IMatchPolicy matchPolicy, int priority) {
         this.options = options;
         this.viewFactory = viewFactory;
         this.matchPolicy = matchPolicy;
@@ -21,7 +21,7 @@ class ViewFactoryOwner implements IViewFactoryOwner {
 
     @NonNull
     @Override
-    public IOptions<?, ?> getOptions() {
+    public IOptions<T, VH> getOptions() {
         return options;
     }
 

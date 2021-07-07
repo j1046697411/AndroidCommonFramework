@@ -7,7 +7,11 @@ public interface IMatchPolicy {
     IMatchPolicy MATCH_POLICY_ALL = itemViewType -> true;
 
     static IMatchPolicy ofItemTypes(int... itemViewTypes) {
-        return itemViewType -> ArrayUtils.contains(itemViewTypes, itemViewType);
+        if (ArrayUtils.nonEmpty(itemViewTypes)) {
+            return itemViewType -> ArrayUtils.contains(itemViewTypes, itemViewType);
+        } else {
+            return MATCH_POLICY_ALL;
+        }
     }
 
     boolean match(int itemViewType);

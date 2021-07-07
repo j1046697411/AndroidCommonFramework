@@ -1,10 +1,22 @@
 package org.jzl.android.recyclerview.v3.core;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
-public interface IViewHolderOwner<T, VH extends IViewHolder> {
+import org.jzl.android.recyclerview.v3.core.vh.IObservable;
+
+public interface IViewHolderOwner<VH extends IViewHolder> {
 
     @NonNull
-    IViewHolderFactory<T, VH> getViewHolderFactory();
+    IContext getContext();
 
+    @NonNull
+    View getItemView();
+
+    @NonNull
+    VH getViewHolder();
+
+    @NonNull
+    IObservable<VH> getObservable();
 }

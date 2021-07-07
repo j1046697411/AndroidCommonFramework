@@ -4,11 +4,11 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public interface IViewFactoryStore extends IViewFactoryOwner {
+public interface IViewFactoryStore<VH extends IViewHolder> extends IViewFactoryOwner<VH> {
 
     @NonNull
     @Override
-    IOptions<?, ?> getOptions();
+    IOptions<?, VH> getOptions();
 
     @NonNull
     @Override
@@ -21,9 +21,9 @@ public interface IViewFactoryStore extends IViewFactoryOwner {
     @Override
     int getPriority();
 
-    IViewFactoryOwner get(int itemViewType);
+    IViewFactoryOwner<VH> get(int itemViewType);
 
     @NonNull
-    List<IViewFactoryOwner> getUnmodifiableViewFactoryOwners();
+    List<IViewFactoryOwner<VH>> getUnmodifiableViewFactoryOwners();
 
 }

@@ -11,24 +11,34 @@ public interface IBindPolicy {
 
     IBindPolicy BIND_POLICY_ALL = context -> true;
 
+    IBindPolicy BIND_POLICY_NOT_INCLUDED_PAYLOADS = context -> CollectionUtils.isEmpty(context.getPayloads());
+
     @NonNull
     static IBindPolicy ofItemViewTypes(int... itemViewTypes) {
-        return context -> ArrayUtils.contains(itemViewTypes, context.getItemViewType());
+        if (ArrayUtils.nonEmpty(itemViewTypes)) {
+            return context -> ArrayUtils.contains(itemViewTypes, context.getItemViewType());
+        } else {
+            return BIND_POLICY_ALL;
+        }
     }
 
     @NonNull
     static IBindPolicy ofPayloads(Object... payloads) {
-        return context -> {
-            List<Object> targetPayloads = context.getPayloads();
-            if (CollectionUtils.nonEmpty(targetPayloads) && ArrayUtils.nonEmpty(payloads)) {
-                for (Object payload : payloads) {
-                    if (targetPayloads.contains(payload)) {
-                        return true;
+        if (ArrayUtils.nonEmpty(payloads)) {
+            return context -> {
+                List<Object> targetPayloads = context.getPayloads();
+                if (CollectionUtils.nonEmpty(targetPayloads)) {
+                    for (Object payload : payloads) {
+                        if (targetPayloads.contains(payload)) {
+                            return true;
+                        }
                     }
                 }
-            }
-            return false;
-        };
+                return false;
+            };
+        } else {
+            return BIND_POLICY_ALL;
+        }
     }
 
     boolean match(@NonNull IContext context);
