@@ -1,5 +1,7 @@
 package org.jzl.android.recyclerview.v3.core;
 
+import androidx.annotation.NonNull;
+
 import org.jzl.lang.util.ArrayUtils;
 
 public interface IMatchPolicy {
@@ -15,4 +17,9 @@ public interface IMatchPolicy {
     }
 
     boolean match(int itemViewType);
+
+    @NonNull
+    default IBindPolicy toBindPolicy() {
+        return context -> match(context.getItemViewType());
+    }
 }

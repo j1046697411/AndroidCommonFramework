@@ -102,8 +102,8 @@ class OptionsBuilder<T, VH extends IViewHolder> implements IOptionsBuilder<T, VH
 
     @NonNull
     @Override
-    public IOptionsBuilder<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy) {
-        listenerManager.addOnCreatedViewHolderListener(createdViewHolderListener, bindPolicy);
+    public IOptionsBuilder<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IMatchPolicy matchPolicy) {
+        listenerManager.addOnCreatedViewHolderListener(createdViewHolderListener, matchPolicy);
         return this;
     }
 

@@ -1,10 +1,14 @@
 package org.jzl.android.recyclerview.v3.core;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jzl.android.recyclerview.v3.core.components.IComponentManager;
+import org.jzl.android.recyclerview.v3.core.layout.IRecyclerViewLayoutManager;
 import org.jzl.android.recyclerview.v3.core.listeners.IListenerManager;
 import org.jzl.android.recyclerview.v3.core.listeners.OnAttachedToRecyclerViewListener;
 import org.jzl.android.recyclerview.v3.core.listeners.OnClickItemViewListener;
@@ -15,27 +19,45 @@ import org.jzl.android.recyclerview.v3.core.listeners.OnViewAttachedToWindowList
 import org.jzl.android.recyclerview.v3.core.listeners.OnViewDetachedFromWindowListener;
 import org.jzl.android.recyclerview.v3.core.listeners.OnViewRecycledListener;
 import org.jzl.android.recyclerview.v3.core.module.IAdapterModule;
+import org.jzl.lang.util.ObjectUtils;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH>, IDataGetter<T> {
 
     private final IAdapterModule<T, VH> adapterModule;
-    private final IDataProvider<T> dataProvider;
+    private final List<T> dataProvider;
     private final IDataClassifier<T, VH> dataClassifier;
     private final IIdentityProvider<T, VH> identityProvider;
     private final LayoutInflater layoutInflater;
     private final ModuleAdapter<T, VH> adapter;
     private final IOptions<T, VH> options;
     private final IListenerManager<T, VH> listenerManager;
+    private final IComponentManager<T, VH> componentManager;
+    private final IRecyclerViewLayoutManager<T, VH> recyclerViewLayoutManager;
+    private final IAdapterObservable<T, VH> adapterObservable;
+
+    private final Handler mainHandler;
+    private final ExecutorService executorService;
 
     Configuration(ConfigurationBuilder<T, VH> builder, LayoutInflater layoutInflater) {
-        this.adapterModule = builder.adapterModule;
         this.dataClassifier = builder.dataClassifier;
         this.identityProvider = builder.identityProvider;
         this.dataProvider = builder.dataProvider;
         this.layoutInflater = layoutInflater;
         this.listenerManager = builder.listenerManager;
+        this.componentManager = builder.componentManager;
+        this.recyclerViewLayoutManager = builder.recyclerViewLayoutManager;
+
+        this.mainHandler = ObjectUtils.get(builder.mainHandler, () -> new Handler(Looper.getMainLooper()));
+        this.executorService = ObjectUtils.get(builder.executorService, Executors::newSingleThreadExecutor);
+
+        this.adapterModule = builder.adapterModuleProxy.proxy(this, builder.adapterModule);
         this.adapter = new ModuleAdapter<>(this);
         this.options = adapter.setup(this, this);
+        this.adapterObservable = new AdapterObservable<>(this, this.adapter);
     }
 
     public static <T, VH extends IViewHolder> ConfigurationBuilder<T, VH> builder(@NonNull IViewHolderFactory<VH> viewHolderFactory) {
@@ -50,7 +72,7 @@ class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH>,
 
     @NonNull
     @Override
-    public IDataProvider<T> getDataProvider() {
+    public List<T> getDataProvider() {
         return dataProvider;
     }
 
@@ -80,7 +102,7 @@ class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH>,
 
     @Override
     public T getData(int position) {
-        return adapterModule.getItemData(this, dataProvider, position);
+        return adapterModule.getItemData(this, position);
     }
 
     @NonNull
@@ -97,8 +119,43 @@ class Configuration<T, VH extends IViewHolder> implements IConfiguration<T, VH>,
 
     @NonNull
     @Override
-    public IConfiguration<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy) {
-        listenerManager.addOnCreatedViewHolderListener(createdViewHolderListener, bindPolicy);
+    public IComponentManager<T, VH> getComponentManager() {
+        return componentManager;
+    }
+
+    @NonNull
+    @Override
+    public IRecyclerViewLayoutManager<T, VH> getRecyclerViewLayoutManager() {
+        return recyclerViewLayoutManager;
+    }
+
+    @NonNull
+    @Override
+    public IAdapterObservable<T, VH> getAdapterObservable() {
+        return adapterObservable;
+    }
+
+    @Override
+    public boolean isDataEmpty() {
+        return dataProvider.isEmpty();
+    }
+
+    @NonNull
+    @Override
+    public Handler getMainHandler() {
+        return mainHandler;
+    }
+
+    @NonNull
+    @Override
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    @NonNull
+    @Override
+    public IConfiguration<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IMatchPolicy matchPolicy) {
+        listenerManager.addOnCreatedViewHolderListener(createdViewHolderListener, matchPolicy);
         return this;
     }
 

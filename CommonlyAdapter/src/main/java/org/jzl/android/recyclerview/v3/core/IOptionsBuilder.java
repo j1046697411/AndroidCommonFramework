@@ -70,7 +70,7 @@ public interface IOptionsBuilder<T, VH extends IViewHolder> extends IListenerMan
 
     @NonNull
     @Override
-    IOptionsBuilder<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy);
+    IOptionsBuilder<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IMatchPolicy matchPolicy);
 
     @NonNull
     @Override

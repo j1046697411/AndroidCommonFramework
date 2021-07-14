@@ -26,18 +26,22 @@
             android:id="@+id/btn_add_1"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:onClick="@{v-> mainViewModel.showDialog()}"
             android:text="@string/add_all" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_2"
             android:layout_width="match_parent"
-            android:onClick="@{v -> mainViewModel.finish()}"
             android:layout_height="54dp"
             android:text="@string/add_all_2" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_3"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="@string/add_all_2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_add_4"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:text="@string/add_all_2" />

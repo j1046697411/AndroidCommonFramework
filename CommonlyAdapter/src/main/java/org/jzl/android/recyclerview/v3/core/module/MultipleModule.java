@@ -36,7 +36,7 @@ public class MultipleModule<T, VH extends IViewHolder> implements IMultipleModul
         this(viewHolderFactory, new ListenerManager<>());
     }
 
-    MultipleModule(@NonNull IViewHolderFactory<VH> viewHolderFactory, @NonNull IListenerManager<T, VH> listenerManager) {
+    protected MultipleModule(@NonNull IViewHolderFactory<VH> viewHolderFactory, @NonNull IListenerManager<T, VH> listenerManager) {
         this.viewHolderFactory = viewHolderFactory;
         this.listenerManager = listenerManager;
     }

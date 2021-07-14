@@ -111,8 +111,8 @@ class Options<T, VH extends IViewHolder> implements IOptions<T, VH> {
     }
 
     @Override
-    public final void notifyCreatedViewHolder(@NonNull IViewHolderOwner<VH> viewHolderOwner) {
-        listenerManager.notifyCreatedViewHolder(this, viewHolderOwner);
+    public final void notifyCreatedViewHolder(@NonNull IViewHolderOwner<VH> viewHolderOwner, int viewType) {
+        listenerManager.notifyCreatedViewHolder(this, viewHolderOwner, viewType);
     }
 
     @Override

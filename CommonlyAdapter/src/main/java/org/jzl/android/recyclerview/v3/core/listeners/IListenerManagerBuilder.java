@@ -3,16 +3,17 @@ package org.jzl.android.recyclerview.v3.core.listeners;
 import androidx.annotation.NonNull;
 
 import org.jzl.android.recyclerview.v3.core.IBindPolicy;
+import org.jzl.android.recyclerview.v3.core.IMatchPolicy;
 import org.jzl.android.recyclerview.v3.core.IViewHolder;
 
 public interface IListenerManagerBuilder<T, VH extends IViewHolder, B extends IListenerManagerBuilder<T, VH, B>> {
 
     @NonNull
-    B addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy);
+    B addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IMatchPolicy matchPolicy);
 
     @NonNull
     default B addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, int... itemViewTypes) {
-        return addOnCreatedViewHolderListener(createdViewHolderListener, IBindPolicy.ofItemViewTypes(itemViewTypes));
+        return addOnCreatedViewHolderListener(createdViewHolderListener, IMatchPolicy.ofItemTypes(itemViewTypes));
     }
 
     @NonNull

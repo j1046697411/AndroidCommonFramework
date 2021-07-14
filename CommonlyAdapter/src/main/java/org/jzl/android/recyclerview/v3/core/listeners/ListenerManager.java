@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jzl.android.recyclerview.v3.core.IBindPolicy;
+import org.jzl.android.recyclerview.v3.core.IMatchPolicy;
 import org.jzl.android.recyclerview.v3.core.IOptions;
 import org.jzl.android.recyclerview.v3.core.IViewHolder;
 import org.jzl.android.recyclerview.v3.core.IViewHolderOwner;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class ListenerManager<T, VH extends IViewHolder> implements IListenerManager<T, VH> {
 
-    private final List<BinaryHolder<IBindPolicy, OnCreatedViewHolderListener<T, VH>>> createdViewHolderListeners = new CopyOnWriteArrayList<>();
+    private final List<BinaryHolder<IMatchPolicy, OnCreatedViewHolderListener<T, VH>>> createdViewHolderListeners = new CopyOnWriteArrayList<>();
     private final List<BinaryHolder<IBindPolicy, OnClickItemViewListener<T, VH>>> clickItemViewListeners = new CopyOnWriteArrayList<>();
     private final List<BinaryHolder<IBindPolicy, OnLongClickItemViewListener<T, VH>>> longClickItemViewListeners = new CopyOnWriteArrayList<>();
     private final List<BinaryHolder<IBindPolicy, OnViewAttachedToWindowListener<T, VH>>> viewAttachedToWindowListeners = new CopyOnWriteArrayList<>();
@@ -28,9 +29,9 @@ public final class ListenerManager<T, VH extends IViewHolder> implements IListen
     private final List<OnDetachedFromRecyclerViewListener<T, VH>> detachedFromRecyclerViewListeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public void notifyCreatedViewHolder(@NonNull IOptions<T, VH> options, @NonNull IViewHolderOwner<VH> viewHolderOwner) {
+    public void notifyCreatedViewHolder(@NonNull IOptions<T, VH> options, @NonNull IViewHolderOwner<VH> viewHolderOwner, int viewType) {
         ForeachUtils.each(createdViewHolderListeners, target -> {
-            if (target.one.match(viewHolderOwner.getContext())) {
+            if (target.one.match(viewType)) {
                 target.two.onCreatedViewHolder(options, viewHolderOwner);
             }
         });
@@ -147,8 +148,8 @@ public final class ListenerManager<T, VH extends IViewHolder> implements IListen
 
     @NonNull
     @Override
-    public IListenerManager<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IBindPolicy bindPolicy) {
-        this.createdViewHolderListeners.add(BinaryHolder.of(bindPolicy, createdViewHolderListener));
+    public IListenerManager<T, VH> addOnCreatedViewHolderListener(@NonNull OnCreatedViewHolderListener<T, VH> createdViewHolderListener, @NonNull IMatchPolicy matchPolicy) {
+        this.createdViewHolderListeners.add(BinaryHolder.of(matchPolicy, createdViewHolderListener));
         return this;
     }
 

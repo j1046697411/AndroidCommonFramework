@@ -11,7 +11,6 @@ import org.jzl.android.recyclerview.v3.core.IDataBinder;
 import org.jzl.android.recyclerview.v3.core.IOptions;
 import org.jzl.android.recyclerview.v3.core.IViewHolder;
 import org.jzl.android.recyclerview.v3.core.IViewHolderOwner;
-import org.jzl.android.recyclerview.v3.core.vh.IObservable;
 import org.jzl.android.recyclerview.v3.model.ExtraModel;
 import org.jzl.android.recyclerview.v3.model.IExtractable;
 
@@ -59,6 +58,7 @@ public class ModuleAdapterViewHolder<T, VH extends IViewHolder> extends Recycler
     public List<Object> getPayloads() {
         return payloads;
     }
+
 
     @NonNull
     @Override

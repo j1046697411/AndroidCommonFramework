@@ -3,31 +3,26 @@ package org.jzl.android.recyclerview.v3.core.module;
 import androidx.annotation.NonNull;
 
 import org.jzl.android.recyclerview.v3.core.IConfiguration;
-import org.jzl.android.recyclerview.v3.core.IDataClassifier;
-import org.jzl.android.recyclerview.v3.core.IDataProvider;
-import org.jzl.android.recyclerview.v3.core.IIdentityProvider;
 import org.jzl.android.recyclerview.v3.core.IViewHolder;
 import org.jzl.android.recyclerview.v3.core.IViewHolderFactory;
 import org.jzl.android.recyclerview.v3.core.listeners.IListenerManager;
 
-public interface IAdapterModule<T, VH extends IViewHolder> extends IMultipleModule<T, VH>, IDataClassifier<T, VH>, IIdentityProvider<T, VH> {
+public interface IAdapterModule<T, VH extends IViewHolder> extends IMultipleModule<T, VH> {
 
-    default int getItemCount(IConfiguration<T, VH> configuration, IDataProvider<T> dataProvider) {
-        return dataProvider.size();
+    default int getItemCount(IConfiguration<T, VH> configuration) {
+        return configuration.getDataProvider().size();
     }
 
-    @Override
-    default int getItemViewType(IConfiguration<T, VH> configuration, IDataProvider<T> dataProvider, int position) {
-        return configuration.getDataClassifier().getItemViewType(configuration, dataProvider, position);
+    default int getItemViewType(IConfiguration<T, VH> configuration, int position) {
+        return configuration.getDataClassifier().getItemViewType(configuration, configuration.getDataGetter().getData(position), position);
     }
 
-    @Override
-    default long getItemId(IConfiguration<T, VH> configuration, IDataProvider<T> dataProvider, int position) {
-        return configuration.getIdentityProvider().getItemId(configuration, dataProvider, position);
+    default long getItemId(IConfiguration<T, VH> configuration, int position) {
+        return configuration.getIdentityProvider().getItemId(configuration, configuration.getDataGetter().getData(position), position);
     }
 
-    default T getItemData(IConfiguration<T, VH> configuration, IDataProvider<T> dataProvider, int position) {
-        return dataProvider.get(position);
+    default T getItemData(@NonNull IConfiguration<T, VH> configuration, int position) {
+        return configuration.getDataProvider().get(position);
     }
 
     @NonNull

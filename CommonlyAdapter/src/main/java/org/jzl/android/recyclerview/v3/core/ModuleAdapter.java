@@ -1,7 +1,6 @@
 package org.jzl.android.recyclerview.v3.core;
 
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jzl.android.recyclerview.v3.core.module.IAdapterModule;
 import org.jzl.android.recyclerview.v3.core.module.IModule;
 import org.jzl.android.recyclerview.v3.core.vh.ModuleAdapterViewHolder;
-import org.jzl.lang.util.StringUtils;
 
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class ModuleAdapter<T, VH extends IViewHolder> extends
         } else {
             moduleAdapterViewHolder = createViewHolder(viewFactoryOwner.getOptions(), parent, viewType);
         }
-        options.notifyCreatedViewHolder(moduleAdapterViewHolder);
+        options.notifyCreatedViewHolder(moduleAdapterViewHolder, viewType);
         return moduleAdapterViewHolder;
     }
 
@@ -73,17 +71,17 @@ public class ModuleAdapter<T, VH extends IViewHolder> extends
 
     @Override
     public int getItemCount() {
-        return adapterModule.getItemCount(configuration, configuration.getDataProvider());
+        return adapterModule.getItemCount(configuration);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return adapterModule.getItemViewType(configuration, configuration.getDataProvider(), position);
+        return adapterModule.getItemViewType(configuration, position);
     }
 
     @Override
     public long getItemId(int position) {
-        return adapterModule.getItemId(configuration, configuration.getDataProvider(), position);
+        return adapterModule.getItemId(configuration, position);
     }
 
     @Override

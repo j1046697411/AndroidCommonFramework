@@ -34,9 +34,7 @@ public interface IOptions<T, VH extends IViewHolder> extends IViewHolderFactoryO
 
     @NonNull
     @Override
-    default IOptions<?, VH> getOptions() {
-        return this;
-    }
+    IOptions<?, VH> getOptions();
 
     @Override
     IViewFactoryOwner<VH> get(int itemViewType);
@@ -58,7 +56,7 @@ public interface IOptions<T, VH extends IViewHolder> extends IViewHolderFactoryO
     @Override
     IListenerManager<T, VH> getListenerManager();
 
-    void notifyCreatedViewHolder(@NonNull IViewHolderOwner<VH> viewHolderOwner);
+    void notifyCreatedViewHolder(@NonNull IViewHolderOwner<VH> viewHolderOwner, int viewType);
 
     void notifyViewAttachedToWindow(@NonNull IViewHolderOwner<VH> viewHolderOwner);
 

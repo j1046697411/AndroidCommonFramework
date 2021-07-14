@@ -8,4 +8,6 @@ public interface LayoutManagerFactory {
 
     RecyclerView.LayoutManager createLayoutManager(Context context, RecyclerView recyclerView);
 
+
+
 }
